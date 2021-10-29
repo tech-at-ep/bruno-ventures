@@ -1,5 +1,4 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import {User} from "@firebase/auth";
 import firebaseClient from "./firebaseClient";
 
 export interface AuthState {
@@ -8,7 +7,7 @@ export interface AuthState {
     /** Indicates whether the auth session is currently being loaded. */
     isLoading: boolean;
     /** The current user, if logged in. */
-    user?: User;
+    user?: any;
 }
 
 /** The initial authentication state */
@@ -27,7 +26,7 @@ export function useFirebaseAuth() {
 
     useEffect(() => {
         // create authentication state listener
-        firebaseClient.auth().onAuthStateChanged((user: User) => {
+        firebaseClient.auth().onAuthStateChanged((user) => {
             if (user) {
                 // User is signed in.
                 setAuthState({isAuthenticated: true, isLoading: false, user: user});
