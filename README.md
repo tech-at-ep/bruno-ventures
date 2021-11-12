@@ -30,7 +30,7 @@ To access the Firebase SDK, you need to use an initialized instance of the Fireb
 After importing `firebaseClient`, you can use this to access the Firebase SDK.
 
 Example:
-```typescript=
+```javascript
 import firebaseClient from "../util/firebaseClient.ts";
 
 const firestore = firebaseClient.firestore();
