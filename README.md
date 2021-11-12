@@ -23,6 +23,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
+## Using the Firebase SDK
+
+To access the Firebase SDK, you need to use an initialized instance of the Firebase app. To do so, use `firebaseClient` (exported from `util/firebaseClient.ts`).
+
 After importing `firebaseClient`, you can use this to access the Firebase SDK.
 
 Example:
@@ -31,10 +35,6 @@ import firebaseClient from "../util/firebaseClient.ts";
 
 const firestore = firebaseClient.firestore();
 ```
-
-## Using the Firebase SDK
-
-To access the Firebase SDK, you need to use an initialized instance of the Firebase app. To do so, use `firebaseClient` (exported from `util/firebaseClient.ts`).
 
 ## Firebase Auth
 
