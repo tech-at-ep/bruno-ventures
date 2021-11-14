@@ -3,7 +3,8 @@ import styles from '../styles/Home.module.css'
 export default function Home() {
   return (
     <div className={styles.container}>
-      <h1>TODO</h1>
+      <div className={styles.title}>Name of Company Here</div> 
+      <div className={styles.logo}>Logo Here</div>
     </div>
   )
 }
