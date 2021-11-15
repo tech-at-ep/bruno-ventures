@@ -1,13 +1,19 @@
 import styles from '../styles/Form.module.css'
-import {createRef, useState} from 'react';
+import {createRef, useState, Dispatch, SetStateAction} from 'react';
+//@ts-ignore
+import { hexToCSSFilter } from "hex-to-css-filter";
 
-function Card() {
+interface CardProps {
+    setAccentColor : Dispatch<SetStateAction<string>>
+}
+
+function Card({setAccentColor} : CardProps) {
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
                 <InfoForm />
-                <LogoForm />
+                <LogoForm setAccentColor={setAccentColor}/>
             </div>
         </div>
     )
@@ -19,13 +25,58 @@ function InfoForm() {
     )
 }
 
+type VectorProps = {
+    accentColor : string
+}
 
-function LogoForm() {
+function FirstVector({ accentColor } : VectorProps) {
+    return (
+        <svg className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`} width="581" height="760" viewBox="0 0 581 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M194.796 -60.6554L501.485 287.537L-34.3108 759.468L-341 411.276L194.796 -60.6554Z" fill={accentColor}/>
+        <path d="M501.485 287.537C405.334 372.227 258.734 362.936 174.044 266.785C89.3542 170.635 98.645 24.0345 194.796 -60.6554C290.946 -145.345 437.546 -136.055 522.236 -39.904C606.926 56.2466 597.635 202.847 501.485 287.537Z" fill={accentColor}/>
+        </svg>
+    )
+}
+
+function SecondVector({ accentColor } : VectorProps) {
+    return (
+        <svg className={`${styles.bottom_right_vector}  ${styles.noselect} ${styles.nodrag}`} width="636" height="754" viewBox="0 0 636 754" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M368.962 794.473L96.9548 418.563L675.402 -4.19617e-05L947.409 375.91L368.962 794.473Z" fill={accentColor}/>
+        <path d="M96.9548 418.563C200.759 343.45 345.801 366.71 420.913 470.514C496.026 574.319 472.767 719.36 368.962 794.473C265.158 869.585 120.116 846.326 45.0037 742.521C-30.1091 638.717 -6.84975 493.676 96.9548 418.563Z" fill={accentColor}/>
+        </svg>
+    )
+}
+
+interface RGB {
+    r : number,
+    g : number,
+    b : number
+}
+
+function hexToRgb(hex : string): RGB {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : {
+        r: 0,
+        g: 0,
+        b: 0
+    };
+}
+
+function perceievedLuminance(color : RGB): number {
+    return 0.2126*color.r + 0.7152*color.g + 0.0722*color.b;
+}
+
+
+function LogoForm({ setAccentColor } : CardProps) {
     const fileInputRef = createRef<HTMLInputElement>();
     const colorInputRef = createRef<HTMLInputElement>();
 
     const [image, setImage] = useState<string>("");
-    const [accentColor, setAccentColor] = useState<string>("#FF5A5F")
+    const [accentColor, setLocalAccentColor] = useState<string>("#FF5A5F")
     const [uploadedFile, setUploadedFile] = useState<File>();
 
     const onLogoUploaded = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +153,7 @@ function LogoForm() {
                     }}
                     onChange={(event) => {
                         if (event.target?.value) {
+                            setLocalAccentColor(event.target.value);
                             setAccentColor(event.target.value);
                         }
                     }}
@@ -114,17 +166,22 @@ function LogoForm() {
 }
 
 export default function Form() {
+    const [accentColor, setAccentColor] = useState<string>("#FF5A5F");
+    const titleColor = perceievedLuminance(hexToRgb(accentColor)) > 220 ? 
+        '#000000' : 
+        '#ffffff';
     return (
         <div>
-            <img className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`} src="/form_vector_1.svg" />
-            <img className={`${styles.bottom_right_vector} ${styles.noselect} ${styles.nodrag}`} src="/form_vector_2.svg" />
-            <div className={styles.form_title}>
+            {/* <img className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`} src="/form_vector_1.svg" /> */}
+            <FirstVector accentColor={accentColor}/>
+            <SecondVector accentColor={accentColor}/>
+            <div className={styles.form_title} style={{color: titleColor}}>
                 <div>Welcome to</div>
                 <div>Bruno Ventures.</div>
             </div>
             <div className={`${styles.container}`}>
                 {/* <h1>TODO: For form page</h1> */}
-                <Card />            
+                <Card setAccentColor={setAccentColor}/>            
             </div>
        </div>
         
