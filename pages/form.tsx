@@ -31,6 +31,14 @@ const options = [
     { value: "Social Entrepreneurship", label: "Social Entrepreneurship"}
 ];
 
+function Card() {
+    return (
+        <div className={styles.form_card}>
+            <div className={styles.form_card_header}>List Your Startup</div>
+        </div>
+    )
+}
+
 export default function Form() {
     const firestore = firebaseClient.firestore();
     const [app, updateApp] = useState({});
@@ -51,7 +59,6 @@ export default function Form() {
     };
 
     return (
-        <div className = "form-box">
         <form onSubmit={handleSubmit}>
             <label> startup name:
                 <input type="text" name="name"  onChange={e => setProperty("name", e.target.value)}></input>
@@ -79,6 +86,17 @@ export default function Form() {
             <button onClick={handleSubmit}> submit </button>
         </form>
         </div>
+        <div>
+            <img className={`${styles.bottom_right_vector} ${styles.noselect} ${styles.nodrag}`} src="/form_vector_2.svg" />
+            <div className={styles.form_title}>
+                <div>Welcome to</div>
+                <div>Bruno Ventures.</div>
+            </div>
+            <div className={`${styles.container}`}>
+                {/* <h1>TODO: For form page</h1> */}
+                <Card />            
+            </div>
+       </div>
         
     )
-}
+
