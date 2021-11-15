@@ -147,3 +147,35 @@
     flex-direction: column;
   }
 }
+
+/*.form-box{*/
+/*  min-width: 100%;*/
+/*  height: 100vh;*/
+/*  border: dotted #F55A00 5vw;*/
+/*  border: 1px solid red;*/
+/*  margin: 0vw;*/
+/*  padding: 5vw ;*/
+/*  position:relative;*/
+/*}*/
+
+
+.form-box {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 1px solid red;
+}
+
+/*.form-box input{*/
+/*  display: block;*/
+/*  width: 100%;*/
+/*  padding: .5rem .8rem .5rem .8rem;*/
+/*  margin: .9vw 0 ;*/
+/*  border:0;*/
+/*  border-radius: 5px;*/
+/*  font-size: 20px;*/
+/*}*/
+
+/*.form-box textarea{*/
+/*  height: 15vh;*/
+/*}*/

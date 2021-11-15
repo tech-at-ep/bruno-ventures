@@ -4,6 +4,7 @@
     <list default="true" id="1f8b79d3-ce2d-4f04-8274-1d842548a50e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/Form.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/Form.module.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

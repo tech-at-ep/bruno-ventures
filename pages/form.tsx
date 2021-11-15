@@ -51,35 +51,33 @@ export default function Form() {
     };
 
     return (
-        <div>
-            <div className={`${styles.container}`}>
-                <form onSubmit={handleSubmit}>
-                    <label> startup name:
-                        <input type="text" name="name"  onChange={e => setProperty("name", e.target.value)}></input>
-                    </label>
-                    <label> founders:
-                        <input type="text" name="founders"  onChange={e => setProperty("founders", e.target.value)}></input>
-                    </label>
-                    <label> emails:
-                        <input type="text" name="emails"  onChange={e => setProperty("emails", e.target.value)}></input>
-                    </label>
-                    <label> website:
-                        <input type="text" name="website"  onChange={e => setProperty("website", e.target.value)}></input>
-                    </label>
-                    <label> social media handles:
-                        <input type="text" name="handles"  onChange={e => setProperty("handles", e.target.value)}></input>
-                    </label>
-                    <label> mission statement:
-                        <textarea name="mission"  onChange={e => setProperty("mission", e.target.value)}></textarea>
-                    </label>
-                    <label> industry:
-                        <select name="industry" onChange={e => setProperty("industry", e.target.value)}>
-                            {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
-                        </select>
-                    </label>
-                    <button onClick={handleSubmit}> submit </button>
-                </form>
-            </div>
+        <div className = "form-box">
+        <form onSubmit={handleSubmit}>
+            <label> startup name:
+                <input type="text" name="name"  onChange={e => setProperty("name", e.target.value)}></input>
+            </label>
+            <label> founders:
+                <input type="text" name="founders"  onChange={e => setProperty("founders", e.target.value)}></input>
+            </label>
+            <label> emails:
+                <input type="text" name="emails"  onChange={e => setProperty("emails", e.target.value)}></input>
+            </label>
+            <label> website:
+                <input type="text" name="website"  onChange={e => setProperty("website", e.target.value)}></input>
+            </label>
+            <label> social media handles:
+                <input type="text" name="handles"  onChange={e => setProperty("handles", e.target.value)}></input>
+            </label>
+            <label> mission statement:
+                <textarea name="mission"  onChange={e => setProperty("mission", e.target.value)}></textarea>
+            </label>
+            <label> industry:
+                <select name="industry" onChange={e => setProperty("industry", e.target.value)}>
+                    {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
+                </select>
+            </label>
+            <button onClick={handleSubmit}> submit </button>
+        </form>
         </div>
         
     )
