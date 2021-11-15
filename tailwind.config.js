@@ -30,7 +30,7 @@ module.exports = {
       //  },
       extend: {
         backgroundImage: theme => ({
-         'hero': "url('~/pages/assets/brown.jpeg')"
+         'hero': "url('~/assets/brown.jpeg')"
         }),
       },
   },

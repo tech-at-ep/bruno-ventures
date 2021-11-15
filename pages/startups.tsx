@@ -1,9 +1,9 @@
 import styles from '../styles/Home.module.css'
-import Casper from "./assets/casper.png"
-import Opensea from "./assets/opensea.png"
-import Airbnb from "./assets/airbnb.png"
-import Warby from "./assets/warby.png"
-import SearchBar from "./components/SearchBar"
+import Casper from "../assets/casper.png"
+import Opensea from "../assets/opensea.png"
+import Airbnb from "../assets/airbnb.png"
+import Warby from "../assets/warby.png"
+import SearchBar from "../components/SearchBar"
 
 //remove this! it's just for show
 let arr = []

@@ -3,12 +3,12 @@ import type {AppProps} from 'next/app'
 import {FirebaseAuthProvider, useFirebaseAuth} from "../util/firebaseAuthHelpers"
 import Head from "next/head";
 
-import Hero from './components/Hero';
-import Navbar from './components/Navbar'
-import Footer from './components/Footer';
+import Hero from '../components/Hero';
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer';
 import Startups from './startups';
 
-import logo from "./assets/logo.jpeg";
+import logo from "../assets/logo.jpeg";
 
 
 function MyApp({Component, pageProps}: AppProps) {
