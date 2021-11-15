@@ -29,10 +29,14 @@ export default function Form() {
     const addItem = () => {
         firestore.collection('apps').add({app});
     };
-    const handleChange = (event: any) => {
-        updateApp(event.target.value);
-        console.log(app);
+
+    const setProperty = (property:string, value:string) => {
+        updateApp({
+            ...app,
+            [property]: value
+        });
     };
+
     const handleSubmit = (event: any) => {
         event.preventDefault();
         addItem();
@@ -43,25 +47,27 @@ export default function Form() {
             <div className={`${styles.container}`}>
                 <form onSubmit={handleSubmit}>
                     <label> startup name:
-                        <input type="text" name="name"  onChange={handleChange}></input>
+                        <input type="text" name="name"  onChange={e => setProperty("name", e.target.value)}></input>
                     </label>
                     <label> founders:
-                        <input type="text" name="founders"  onChange={handleChange}></input>
+                        <input type="text" name="founders"  onChange={e => setProperty("founders", e.target.value)}></input>
                     </label>
                     <label> emails:
-                        <input type="text" name="emails"  onChange={handleChange}></input>
+                        <input type="text" name="emails"  onChange={e => setProperty("emails", e.target.value)}></input>
                     </label>
                     <label> website:
-                        <input type="text" name="website"  onChange={handleChange}></input>
+                        <input type="text" name="website"  onChange={e => setProperty("website", e.target.value)}></input>
                     </label>
                     <label> social media handles:
-                        <input type="text" name="handles"  onChange={handleChange}></input>
+                        <input type="text" name="handles"  onChange={e => setProperty("handles", e.target.value)}></input>
                     </label>
                     <label> mission statement:
-                        <textarea name="mission"  onChange={handleChange}></textarea>
+                        <textarea name="mission"  onChange={e => setProperty("mission", e.target.value)}></textarea>
                     </label>
                     <label> industry:
-                        <Select name="industry" onChange={handleChange} options={options}/>
+                        <select name="industry" onChange={e => setProperty("industry", e.target.value)}>
+                            {options.map(({ value, label }, index) => <option value={value} >{label}</option>)}
+                        </select>
                     </label>
                     <button onClick={handleSubmit}> submit </button>
                 </form>
