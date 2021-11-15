@@ -1,4 +1,4 @@
-
+// @ts-ignore
 import firebase from 'firebase';
 import {FirebaseError} from "@firebase/util";
 
