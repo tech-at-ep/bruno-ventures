@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from 'react';
-import firebaseApp from "./firebaseClient";
+import firebaseApp from "./firebaseApp";
 import {
     getAuth,
     GoogleAuthProvider,
