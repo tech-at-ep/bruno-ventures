@@ -3,6 +3,14 @@ import React, { useState } from 'react';
 import firebaseClient from "../util/firebaseClient";
 import Select from 'react-select';
 
+function Card() {
+    return (
+        <div className={styles.form_card}>
+            <div className={styles.form_card_header}>List Your Startup</div>
+        </div>
+    )
+}
+
 type app = {
     name: string;
     website: string;
