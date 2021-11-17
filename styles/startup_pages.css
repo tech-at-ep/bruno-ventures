@@ -1,0 +1,13 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgb(111,111,111,0.5); // Here you choose the color and opacity that you want to apply
+    z-index: 9; // You may need to manage the z-index values to make your overlay to stay behind your popup
+}
+
+.popup-content {
+    z-index: 10; // Makes your popup stay in front of overlay
+}
