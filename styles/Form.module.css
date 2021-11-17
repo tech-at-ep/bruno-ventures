@@ -219,12 +219,28 @@
   width: 100%;
   padding: .5rem .8rem .5rem .8rem;
   margin: .9vw 0 ;
-  border-radius: 5px;
-  font-size: 18px;
+  border-radius: 3px;
+  font-size: 16px;
   background: #f6f5f8;
   border: 1px solid #f1f1f1;
   box-shadow: 1px 1px 1px #f1f1f1;
 }
+
+.handle{
+  width: 25%;
+  composes: input;
+  margin: 0 0.5vw 0 0;
+}
+
+.socials .handle:last-child{
+  margin: 0;
+}
+
+.socials{
+  display:flex;
+  flex-direction:row;
+}
+
 
 .input::placeholder{
   color: #b8b8b8;
@@ -241,4 +257,8 @@
 
 .select:invalid{
   color: #b8b8b8;
+}
+
+.input:focus{
+  outline: none;
 }

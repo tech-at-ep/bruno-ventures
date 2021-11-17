@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f8b79d3-ce2d-4f04-8274-1d842548a50e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/form.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/styles/Form.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/Form.module.css" afterDir="false" />
     </list>
@@ -44,12 +45,12 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="dd1a9da6-bd55-45db-bf42-9e32f821144a" name="Default Changelist" comment="" />
+      <changelist id="1f8b79d3-ce2d-4f04-8274-1d842548a50e" name="Default Changelist" comment="" />
       <created>1636733801170</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -59,6 +60,8 @@
       <workItem from="1636819948696" duration="69000" />
       <workItem from="1636938581782" duration="3771000" />
       <workItem from="1636943318127" duration="1253000" />
+      <workItem from="1637034792193" duration="51000" />
+      <workItem from="1637174961784" duration="1681000" />
     </task>
     <servers />
   </component>

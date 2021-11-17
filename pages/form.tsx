@@ -62,13 +62,18 @@ export default function Form() {
                     <input className={styles.input} placeholder="Founders" type="text" name="founders" onChange={e => setProperty("founders", e.target.value)}></input>
                 {/*</label>*/}
                 {/*<label> emails:*/}
-                    <input className={styles.input} placeholder="Emails" type="text" name="emails" onChange={e => setProperty("emails", e.target.value)}></input>
+                    <input className={styles.input} placeholder="Email" type="text" name="emails" onChange={e => setProperty("emails", e.target.value)}></input>
                 {/*</label>*/}
                 {/*<label> website:*/}
                     <input className={styles.input} placeholder="Website Link" type="text" name="website" onChange={e => setProperty("website", e.target.value)}></input>
                 {/*</label>*/}
                 {/*<label> social media handles:*/}
-                    <input className={styles.input} placeholder="Social Media Handles" type="text" name="handles" onChange={e => setProperty("handles", e.target.value)}></input>
+                <div className={styles.socials}>
+                    <input className={styles.handle} placeholder="Twitter" type="text" name="handles" onChange={e => setProperty("twitter", e.target.value)}></input>
+                    <input className={styles.handle} placeholder="Facebook" type="text" name="handles" onChange={e => setProperty("facebook", e.target.value)}></input>
+                    <input className={styles.handle} placeholder="Instagram" type="text" name="handles" onChange={e => setProperty("instagram", e.target.value)}></input>
+                    <input className={styles.handle} placeholder="Linkedin" type="text" name="handles" onChange={e => setProperty("linkedin", e.target.value)}></input>
+                </div>
                 {/*</label>*/}
                 {/*<label> mission statement:*/}
                     <textarea className={styles.textarea} placeholder="Company Description" name="mission" onChange={e => setProperty("mission", e.target.value)}></textarea>
