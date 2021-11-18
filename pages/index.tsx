@@ -1,5 +1,6 @@
 import styles from '../styles/Home.module.css'
 import {useAuth} from "../util/firebaseAuthHelpers";
+import firebase from 'firebase';
 
 export default function Home() {
     const {isAuthenticated, user, signInWithGoogle, signOut} = useAuth();

@@ -82,6 +82,22 @@
   max-height: 800px;
 }
 
+.dropdown {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin-top: 1rem;
+  margin-left: 14.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+.dropdown-menu {
+  cursor: pointer;
+}
+
 .card {
   margin: 1rem;
   overflow: hidden;
