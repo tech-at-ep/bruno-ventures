@@ -25,16 +25,9 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 ## Using the Firebase SDK
 
-To access the Firebase SDK, you need to use an initialized instance of the Firebase app. To do so, use `firebaseClient` (exported from `util/firebaseClient.ts`).
+To access the Firebase SDK, you need to use an initialized instance of the Firebase app. To do so, use `firebaseApp` (exported from `util/firebaseApp.ts`).
 
-After importing `firebaseClient`, you can use this to access the Firebase SDK.
-
-Example:
-```javascript
-import firebaseClient from "../util/firebaseClient.ts";
-
-const firestore = firebaseClient.firestore();
-```
+After importing `firebaseApp`, you can use this to access the Firebase SDK.
 
 ## Firebase Auth
 
