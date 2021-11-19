@@ -1,14 +1,25 @@
 import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import opensea from '../images/opensea_logo.png'
 
+function Header() {
+    return (
+        <div className={styles.container}>
+            <div className={styles.title}>Test Title</div>
+        </div>
+    )
+}
+
+function Logo() {
+    return <img src={opensea.src} />
+}
 
 export default function Startups() {
     return (
         <div className={styles.container}>
-            <div className={styles.title}>
-                Test Title
-            </div>
+            <Header />
             <div className={styles.logo}>
-                LOGO?
+            <Logo />
             </div>
             <div className={styles.description}>
             Mission Statement: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id venenatis diam. Pellentesque enim enim, fermentum vel nisi quis, facilisis dapibus turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. 
