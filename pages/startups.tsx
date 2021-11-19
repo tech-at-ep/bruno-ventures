@@ -7,7 +7,7 @@ import SearchBar from "../components/SearchBar"
 import Dropdown from "../components/Dropdown"
 
 //remove this! it's just for show
-let arr = []
+let arr: StaticImageData[] = []
 arr.push(Casper, Opensea, Airbnb, Warby)
 
 export default function Startups() {
