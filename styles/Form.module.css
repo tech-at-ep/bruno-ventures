@@ -8,7 +8,7 @@
     /* flex-direction: column; */
     justify-content: center;
     /* align-items: center; */
-    height: 100vh;
+    /* height: 100vh; */
     padding-top: 9rem;
     /* width: 60rem; */
     /* height: 100%; */
@@ -26,7 +26,7 @@
     /* flex-direction: column; */
     justify-content: center;
     /* align-items: center; */
-    height: 100vh;
+    /* height: 100vh; */
     padding-top: 9rem;
     /* height: 100%; */
     padding-bottom: 5rem;
@@ -41,7 +41,7 @@
 
 .form_body {
   display: grid;
-  height: calc(100% - 7rem);;
+  /* height: calc(100% - 7rem);; */
   width: 100%;
 }
 
@@ -54,7 +54,7 @@
   flex-direction: column;
   /* padding-top: 50%; */
   /* justify-content: center; */
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
   padding-bottom: 4rem;
   border-left-width: 1px;
@@ -227,14 +227,15 @@
   border-radius: 20px;
   transition: color 0.15s ease, border-color 0.15s ease;
   width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* height: 100%; */
   z-index: 2;
   background-color: #FFFFFF;
   /* filter: drop-shadow(0px 20px 20px #000000); */
   box-shadow: 0 20px 20px rgb(0 0 0 / 0.25);
   padding: 0px;
 }
-
 
 .form_card_header {
   padding-top: 1.5rem;
@@ -303,12 +304,12 @@
 }
 
 .text_form_container{
-  max-width: 50%;
-  height: 100vh;
-  /* border: 1px solid red; */
+  grid-column: 1 / 3;
+  width: 100%;
+  /* height: 100vh; */
   margin: 0vw;
-  padding: 5vw ;
-  position:relative;
+  padding: 3vh 4vw 3vh 4vw;
+  /* position:relative; */
 }
 
 .input{
@@ -324,7 +325,9 @@
 }
 
 .handle{
-  width: 25%;
+  position: relative;
+  width: 10px;
+  flex-grow: 4;
   composes: input;
   margin: 0 0.5vw 0 0;
 }

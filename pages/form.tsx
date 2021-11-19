@@ -66,44 +66,37 @@ function TextForm() {
     return (
         <div className={`${styles.text_form_container}`}>
             <form onSubmit={handleSubmit}>
-                {/*<label> startup name:*/}
-                    <input className={styles.input}  placeholder="Startup Name" type="text" name="name" onChange={e => setProperty("name", e.target.value)}></input>
-                {/*</label>*/}
-                {/*<label> founders:*/}
+                <label> startup name:</label>
+                <input className={styles.input}  placeholder="Startup Name" type="text" name="name" onChange={e => setProperty("name", e.target.value)}></input>
+                <label> founders:</label>
                     <input className={styles.input} placeholder="Founders" type="text" name="founders" onChange={e => setProperty("founders", e.target.value)}></input>
-                {/*</label>*/}
-                {/*<label> emails:*/}
+                <label> emails:</label>
                     <input className={styles.input} placeholder="Email" type="text" name="emails" onChange={e => setProperty("emails", e.target.value)}></input>
-                {/*</label>*/}
-                {/*<label> website:*/}
+                
+                <label> website:</label>
                     <input className={styles.input} placeholder="Website Link" type="text" name="website" onChange={e => setProperty("website", e.target.value)}></input>
-                {/*</label>*/}
-                {/*<label> social media handles:*/}
+                
+                <label> social media handles:</label>
                 <div className={styles.socials}>
                     <input className={styles.handle} placeholder="Twitter" type="text" name="handles" onChange={e => setProperty("twitter", e.target.value)}></input>
                     <input className={styles.handle} placeholder="Facebook" type="text" name="handles" onChange={e => setProperty("facebook", e.target.value)}></input>
                     <input className={styles.handle} placeholder="Instagram" type="text" name="handles" onChange={e => setProperty("instagram", e.target.value)}></input>
                     <input className={styles.handle} placeholder="Linkedin" type="text" name="handles" onChange={e => setProperty("linkedin", e.target.value)}></input>
                 </div>
-                {/*</label>*/}
-                {/*<label> mission statement:*/}
+                
+                <label> mission statement:</label>
                     <textarea className={styles.textarea} placeholder="Company Description" name="mission" onChange={e => setProperty("mission", e.target.value)}></textarea>
-                {/*</label>*/}
-                {/*<label> industry:*/}
+                
+                <label> industry:</label>
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
                     </select>
-                {/*</label>*/}
+                
                 <button onClick={handleSubmit}> submit</button>
             </form>
         </div>
     )}
-function InfoForm() {
-    return (
-        <div className={styles.info_form}>Placeholder for info form</div>
-    )
-}
 
 type VectorProps = {
     accentColor : string
@@ -260,7 +253,6 @@ export default function Form() {
                 <div>Bruno Ventures.</div>
             </div>
             <div className={`${styles.container}`}>
-                {/* <h1>TODO: For form page</h1> */}
                 <Card setAccentColor={setAccentColor}/>            
             </div>
        </div>
