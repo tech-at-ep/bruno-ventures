@@ -244,7 +244,7 @@ export default function Form() {
         '#000000' : 
         '#ffffff';
     return (
-        <div>
+        <div style={{position: 'relative'}}>
             {/* <img className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`} src="/form_vector_1.svg" /> */}
             <FirstVector accentColor={accentColor}/>
             <SecondVector accentColor={accentColor}/>
