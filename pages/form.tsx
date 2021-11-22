@@ -12,25 +12,57 @@ interface CardProps {
 }
 
 function Card({setAccentColor} : CardProps) {
+    const firestore = firebaseClient.firestore();
+    const [app, updateApp] = useState<Application>({
+        name: '',
+        website: '',
+        founders: '',
+        twitter: '',
+        instagram: '',
+        facebook: '',
+        linkedin: '',
+        email: '',
+        mission: '',
+        industry: '',
+        accentColor: '',
+        imageData: ''
+    });
+
+    const addItem = () => {
+        firestore.collection('apps').add({app});
+    };
+
+    const setProperty = (property: string, value: string) => {
+        updateApp({
+            ...app,
+            [property]: value
+        });
+    };
+
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
-                <TextForm />
-                <LogoForm setAccentColor={setAccentColor}/>
+                <TextForm setProperty={setProperty} addItem={addItem}/>
+                <LogoForm setAccentColor={setAccentColor} setProperty={setProperty}/>
             </div>
         </div>
     )
 }
 
-type app = {
+type Application = {
     name: string;
     website: string;
-    handles: string;
+    twitter: string;
+    facebook: string;
+    instagram: string;
+    linkedin: string;
     founders: string;
     email: string;
     mission: string;
     industry: string;
+    accentColor: string;
+    imageData: string;
 }
 
 const options = [
@@ -44,19 +76,12 @@ const options = [
     { value: "Social Entrepreneurship", label: "Social Entrepreneurship"}
 ];
 
-function TextForm() {
-    const firestore = firebaseClient.firestore();
-    const [app, updateApp] = useState({});
-    const addItem = () => {
-        firestore.collection('apps').add({app});
-    };
+interface TextFormProps {
+    setProperty : (arg0 : string, arg1 : string) => void;
+    addItem : () => void;
+}
 
-    const setProperty = (property: string, value: string) => {
-        updateApp({
-            ...app,
-            [property]: value
-        });
-    };
+function TextForm({setProperty, addItem} : TextFormProps) {
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
@@ -71,7 +96,7 @@ function TextForm() {
                 <label> founders:</label>
                     <input className={styles.input} placeholder="Founders" type="text" name="founders" onChange={e => setProperty("founders", e.target.value)}></input>
                 <label> emails:</label>
-                    <input className={styles.input} placeholder="Email" type="text" name="emails" onChange={e => setProperty("emails", e.target.value)}></input>
+                    <input className={styles.input} placeholder="Email" type="text" name="emails" onChange={e => setProperty("email", e.target.value)}></input>
                 
                 <label> website:</label>
                     <input className={styles.input} placeholder="Website Link" type="text" name="website" onChange={e => setProperty("website", e.target.value)}></input>
@@ -143,8 +168,12 @@ function perceievedLuminance(color : RGB): number {
     return 0.2126*color.r + 0.7152*color.g + 0.0722*color.b;
 }
 
+interface LogoFormProps {
+    setAccentColor : Dispatch<SetStateAction<string>>;
+    setProperty : (arg0 : string, arg1 : string) => void;
+}
 
-function LogoForm({ setAccentColor } : CardProps) {
+function LogoForm({ setAccentColor, setProperty } : LogoFormProps) {
     const fileInputRef = createRef<HTMLInputElement>();
     const colorInputRef = createRef<HTMLInputElement>();
 
@@ -161,10 +190,10 @@ function LogoForm({ setAccentColor } : CardProps) {
         reader.onload = (ev : ProgressEvent<FileReader>) => {
             if (ev.target?.result != null) {
                 setImage(ev.target.result.toString());
+                setProperty('imageData', ev.target.result.toString());
             }
         }
         reader.readAsDataURL(event.target.files[0]);
-        console.log(event.target.files[0]);
     }
 
     const logoOnClick = () => {
@@ -228,6 +257,7 @@ function LogoForm({ setAccentColor } : CardProps) {
                         if (event.target?.value) {
                             setLocalAccentColor(event.target.value);
                             setAccentColor(event.target.value);
+                            setProperty('accentColor', event.target.value)
                         }
                     }}
                     ref={colorInputRef}
