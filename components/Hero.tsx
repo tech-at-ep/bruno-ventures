@@ -1,7 +1,7 @@
 import React from "react";
 
 
-const Hero = ({tagLine}) => {
+const Hero = ({tagLine}: {tagLine: string}) => {
   return (
     <div id="product">
       <div style={{textShadow:'0px 1px 1px gray'}} className="flex flex-col items-center justify-start font-sans min-h-full bg-gray-50 lg:pt-10 lg:pb-20 lg:bg-hero lg:bg-cover">
