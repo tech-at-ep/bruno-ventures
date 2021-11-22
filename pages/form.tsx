@@ -11,6 +11,22 @@ interface CardProps {
     setAccentColor : Dispatch<SetStateAction<string>>
 }
 
+function ValidateApp(app : Application) : boolean {
+    const urlReg = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
+    if (Object.values(app).includes('')) { 
+        return false; 
+    } else if (!urlReg.test(app.website)) {
+        return false; 
+    } else if (!emailReg.test(app.email.toLowerCase())) {
+        return false;
+    } else if (app.founders.split(' ').length < 2) {
+        return false;
+    }
+    return true;
+}
+
 function Card({setAccentColor} : CardProps) {
     const firestore = firebaseClient.firestore();
     const [app, updateApp] = useState<Application>({
@@ -103,9 +119,23 @@ function TextForm({setProperty, addItem} : TextFormProps) {
                 
                 <label> social media handles:</label>
                 <div className={styles.socials}>
-                    <input className={styles.handle} placeholder="Twitter" type="text" name="handles" onChange={e => setProperty("twitter", e.target.value)}></input>
+                    <input className={styles.handle} placeholder="Twitter" type="text" name="handles" onChange={e => {
+                        if (e.target.value.length == 0) {
+                            e.target.value == '';
+                        } else if (e.target.value[0] !== '@') {
+                            e.target.value = '@' + e.target.value;
+                        }
+                        setProperty("twitter", e.target.value);                    
+                    }} />
                     <input className={styles.handle} placeholder="Facebook" type="text" name="handles" onChange={e => setProperty("facebook", e.target.value)}></input>
-                    <input className={styles.handle} placeholder="Instagram" type="text" name="handles" onChange={e => setProperty("instagram", e.target.value)}></input>
+                    <input className={styles.handle} placeholder="Instagram" type="text" name="handles" onChange={e => {
+                        if (e.target.value.length == 0) {
+                            e.target.value == '';
+                        } else if (e.target.value[0] !== '@') {
+                            e.target.value = '@' + e.target.value;
+                        }
+                        setProperty("instagram", e.target.value);                    
+                    }} />
                     <input className={styles.handle} placeholder="Linkedin" type="text" name="handles" onChange={e => setProperty("linkedin", e.target.value)}></input>
                 </div>
                 
@@ -116,9 +146,7 @@ function TextForm({setProperty, addItem} : TextFormProps) {
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>
-                
-                <button onClick={handleSubmit}> submit</button>
+                    </select>                
             </form>
         </div>
     )}
@@ -275,12 +303,11 @@ export default function Form() {
         '#ffffff';
     return (
         <div style={{position: 'relative'}}>
-            {/* <img className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`} src="/form_vector_1.svg" /> */}
             <FirstVector accentColor={accentColor}/>
             <SecondVector accentColor={accentColor}/>
             <div className={styles.form_title} style={{color: titleColor}}>
-                <div>Welcome to</div>
-                <div>Bruno Ventures.</div>
+                <div style={{marginBottom:'0px', padding: '0px'}}>Welcome to</div>
+                <div style={{marginTop:'-1rem', padding: '0px'}}>Bruno Ventures.</div>
             </div>
             <div className={`${styles.container}`}>
                 <Card setAccentColor={setAccentColor}/>            
