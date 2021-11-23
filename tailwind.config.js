@@ -22,12 +22,6 @@ module.exports = {
         'sm': '300px',
         'lg': '700px'
         },
-      // fontFamily: {
-      //   'sans': ['ui-sans-serif', 'system-ui'],
-      //   'serif': ['ui-serif', 'Georgia'],
-      //   'mono': ['ui-monospace', 'SFMono-Regular'],
-      //   'montserrat': ['Montserrat'],
-      //  },
       extend: {
         backgroundImage: theme => ({
          'hero': "url('~/assets/brown.jpeg')"
