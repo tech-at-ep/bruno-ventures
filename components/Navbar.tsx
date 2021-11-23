@@ -1,29 +1,11 @@
-import React, {useState, useEffect, useRef} from "react";
-
-function useOutsideAlerter(ref, setOpenNav) {
-  useEffect(() => {
-
-      function handleClickOutside(event) {
-          if (ref.current && !ref.current.contains(event.target)) {
-              setOpenNav(false);
-          }
-      }
-
-      // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-          // Unbind the event listener on clean up
-          document.removeEventListener("mousedown", handleClickOutside);
-      };
-  }, [ref]);
-}
+import React from "react";
 
 const Navbar = () => {
 
-  const [openNav, setOpenNav] = useState(false);
+  // const [openNav, setOpenNav] = useState(false);
 
-  const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, setOpenNav);
+  // const wrapperRef = useRef(null);
+  // // useOutsideAlerter(wrapperRef, setOpenNav);
 
   return (
     <div className="flex flex-auto justify-end items-center h-28 absolute left-0 right-0 top-0">
