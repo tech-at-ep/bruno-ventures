@@ -33,7 +33,7 @@ function MyApp({Component, pageProps}: AppProps) {
         </div>
         
         <div className="relative top-96 h-2 my-24">
-        <Footer logo={logo.src}/>
+        <Footer logo={logo}/>
         </div>
     </div>
         </Head>
