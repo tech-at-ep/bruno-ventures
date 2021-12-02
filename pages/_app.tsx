@@ -8,45 +8,44 @@ const imagePath = '../images/opensea_logo.png'
 
 function Header() {
     return (
-        <div className={styles.container}>
-            <div className={styles.title}>Test Title</div>
-        </div>
+        <div className={styles.title}>Test Title</div>
     )
 }
 
 function Logo() {
-    return <img src={imagePath} width="66" height="65"/>
+    return <img src={opensea.src} width="66" height="65"/>
 }
 
 export default function Startups() {
     return (
         <div className={styles.container}>
             <Header />
+            <div className={styles.dropdown}>
             <div className={styles.logo}>
             <Logo />
             </div>
-            <div className={styles.dropdown}>
                 <div className={styles.description}>
-                <h2>Industry</h2>
+                <h3>Industry</h3>
                 <p>Blockchain</p>
                 </div>
                 <div className={styles.description}>
-                <h2>Year</h2>
+                <h3>Year</h3>
                 <p>2019</p>
                 </div>
                 <div className={styles.description}>
-                <h2>Contact</h2>
+                <h3>Contact</h3>
                 <p>hello@opensea.io</p>
                 </div>
                 <div className={styles.description}>
-                <h2>Website</h2>
+                <h3>Website</h3>
                 <p><a href="https://opensea.io/">opensea.io</a></p>
                 </div>
             </div>
-            <div className={styles.description}>
-            Mission Statement: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id venenatis diam. Pellentesque enim enim, fermentum vel nisi quis, facilisis dapibus turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. 
+            <b>Mission Statement:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id venenatis diam. Pellentesque enim enim, fermentum vel nisi quis, facilisis dapibus turpis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. 
 
 Description: Mauris ultricies eu nibh at efficitur. Ut tortor metus, pellentesque eu turpis tincidunt, ultricies semper dui. Sed tincidunt sit amet enim quis facilisis. Sed a volutpat augue. Fusce gravida sapien risus, vitae consectetur magna maximus at. Aliquam a augue tellus. Mauris eleifend, tortor a venenatis laoreet, justo nisi euismod libero, quis pulvinar arcu arcu non sapien. Donec pulvinar elit id eros varius convallis.
+            <div className={styles.description}>
+            
             </div>
         </div>
     )
