@@ -9,15 +9,32 @@ import Footer from '../components/Footer';
 import Startups from './startups';
 
 import logo from "../assets/logo.jpeg";
+import SplashScreen from '../util/splashscreen';
+import { useState, useEffect } from 'react';
 
 
 function MyApp({Component, pageProps}: AppProps) {
     const firebaseAuthState = useFirebaseAuth();
-
+    const [loading, setLoading] = useState<boolean>(true);
+    const [fading, setFading] = useState<boolean>(false);
     // Waits until the session is loaded before loading the page
     // if (firebaseAuthState.isLoading) return null
+    
+    useEffect(() => {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0;
+      loading ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'visible';
+    })
 
+    const StopLoading = () => {
+      console.log()
+      setFading(true);
+      setTimeout(() => setLoading(false), 1000);
+    }
+
+    setTimeout(StopLoading, 2000);
     return (<FirebaseAuthProvider value={firebaseAuthState}>
+        {loading && <SplashScreen fading={fading}/>}
         <Head>
             <title>🐻 Bruno Ventures</title>
             <div className="box-border">
