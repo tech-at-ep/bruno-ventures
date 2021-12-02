@@ -28,7 +28,7 @@ function ValidateApp(app : Application) : boolean {
 }
 
 function Card({setAccentColor} : CardProps) {
-    const firestore = firebaseClient.firestore();
+    const addStartup = firebaseClient.functions().httpsCallable('addStartup');
     const [app, updateApp] = useState<Application>({
         name: '',
         website: '',
@@ -45,7 +45,8 @@ function Card({setAccentColor} : CardProps) {
     });
 
     const addItem = () => {
-        firestore.collection('apps').add({app});
+        addStartup({app});
+        console.log(app);
     };
 
     const setProperty = (property: string, value: string) => {
@@ -106,13 +107,13 @@ function TextForm({setProperty, addItem} : TextFormProps) {
 
     return (
         <div className={`${styles.text_form_container}`}>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <label> startup name:</label>
                 <input className={styles.input}  placeholder="Startup Name" type="text" name="name" onChange={e => setProperty("name", e.target.value)}></input>
                 <label> founders:</label>
                     <input className={styles.input} placeholder="Founders" type="text" name="founders" onChange={e => setProperty("founders", e.target.value)}></input>
                 <label> emails:</label>
-                    <input className={styles.input} placeholder="Email" type="text" name="emails" onChange={e => setProperty("email", e.target.value)}></input>
+                    <input className={styles.input} placeholder="Email" type="email" name="emails" onChange={e => setProperty("email", e.target.value)}></input>
                 
                 <label> website:</label>
                     <input className={styles.input} placeholder="Website Link" type="text" name="website" onChange={e => setProperty("website", e.target.value)}></input>
@@ -146,7 +147,8 @@ function TextForm({setProperty, addItem} : TextFormProps) {
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>                
+                    </select>   
+                <button onClick={handleSubmit}> submit</button>             
             </form>
         </div>
     )}
