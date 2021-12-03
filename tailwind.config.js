@@ -23,7 +23,7 @@ module.exports = {
         },
       extend: {
         backgroundImage: theme => ({
-         'hero': "url('~/assets/brown.jpeg')"
+         'hero': "url('~/assets/brown.png')"
         }),
       },
   },
