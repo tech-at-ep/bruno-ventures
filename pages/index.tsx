@@ -18,7 +18,7 @@ export default function Home() {
     
     useEffect(() => {
       document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 1;
+      document.documentElement.scrollTop = 0;
       loading ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'visible';
     })
 
