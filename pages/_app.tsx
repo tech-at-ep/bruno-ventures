@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import type {AppProps} from 'next/app'
 import {FirebaseAuthProvider, useFirebaseAuth} from "../util/firebaseAuthHelpers"
 import Head from "next/head";
+import {isBrowser} from 'react-device-detect';
 
 import Hero from '../components/Hero';
 import Navbar from '../components/Navbar'
@@ -17,7 +18,8 @@ function MyApp({Component, pageProps}: AppProps) {
     // Waits until the session is loaded before loading the page
     // if (firebaseAuthState.isLoading) return null
 
-    return (<FirebaseAuthProvider value={firebaseAuthState}>
+    if(isBrowser){
+      return (<FirebaseAuthProvider value={firebaseAuthState}>
         <Head>
             <title>🐻 Bruno Ventures</title>
             <div className="box-border">
@@ -29,9 +31,8 @@ function MyApp({Component, pageProps}: AppProps) {
         <div id="divider" className="rounded-full ring-2 ring-gray-200 lg:w-1/2 lg:mx-auto "></div>
       </div>
       <div className="relative top-48">
-        <Startups/>
+        <Startups isMobile={false}/>
         </div>
-        
         <div className="relative top-96 h-2 my-24">
         <Footer logo={logo}/>
         </div>
@@ -39,6 +40,30 @@ function MyApp({Component, pageProps}: AppProps) {
         </Head>
         <Component {...pageProps} />
     </FirebaseAuthProvider>)
+    }
+
+    // mobile view
+    return (<FirebaseAuthProvider value={firebaseAuthState}>
+      <Head>
+          <title>🐻 Bruno Ventures</title>
+          <div className="box-border">
+    <div className="flex flex-col">
+      <Navbar/>
+      <Hero 
+        tagLine={'Startups start here.'}
+      />
+      <div id="divider" className="rounded-full ring-2 ring-gray-200 lg:w-1/2 lg:mx-auto "></div>
+    </div>
+    <div className="relative top-48">
+      <Startups isMobile={true}/>
+      </div>
+      <div className="relative top-96 h-2 my-24">
+      <Footer logo={logo}/>
+      </div>
+  </div>
+      </Head>
+      <Component {...pageProps} />
+  </FirebaseAuthProvider>)
 }
 
 export default MyApp
