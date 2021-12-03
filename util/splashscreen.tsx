@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../styles/Splash.module.css';
+// import styles from '../styles/Splash.module.css';
 
 interface SplashScreenProps {
     fading: boolean;
@@ -7,9 +7,9 @@ interface SplashScreenProps {
 
 function SplashScreen({fading} : SplashScreenProps) {
   return (
-    <div className={fading ?  `${styles.splash_screen} ${styles.hidden}` : styles.splash_screen}>
-      <img style={{maxHeight: '20vh'}}src='brunoventureslogo.png' />
-      <div className={styles.loading_dot}>.</div>
+    <div className={fading ?  `splash_screen hidden` : `splash_screen`}>
+      <img style={{maxHeight: '20vh'}} src='brunoventureslogo.png' />
+      <div className="loading_dot">.</div>
     </div>
   );
 }

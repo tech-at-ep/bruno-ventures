@@ -35,7 +35,8 @@ function MyApp({Component, pageProps}: AppProps) {
     setTimeout(StopLoading, 2000);
     return (<FirebaseAuthProvider value={firebaseAuthState}>
         {loading && <SplashScreen fading={fading}/>}
-        {/* <Head>
+        <div style={{overflow: 'visible'}}>
+        <Head>
             <title>🐻 Bruno Ventures</title>
             <div className="box-border">
       <div className="flex flex-col">
@@ -54,7 +55,8 @@ function MyApp({Component, pageProps}: AppProps) {
         </div>
     </div>
         </Head>
-        <Component {...pageProps} /> */}
+        <Component {...pageProps} />
+        </div>
     </FirebaseAuthProvider>)
 }
 
