@@ -8,7 +8,9 @@ const imagePath = '../images/opensea_logo.png'
 
 function Header() {
     return (
-        <div className={styles.title}>Test Title</div>
+        <div className={styles.title}>
+            Test Title
+        </div>
     )
 }
 
@@ -19,7 +21,9 @@ function Logo() {
 export default function Startups() {
     return (
         <div className={styles.container}>
+            <div className={styles.rectangle}>
             <Header />
+            </div>
             <div className={styles.dropdown}>
             <div className={styles.logo}>
             <Logo />

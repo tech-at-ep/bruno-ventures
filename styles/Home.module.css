@@ -127,9 +127,18 @@
   justify-content: left;
   flex-wrap: wrap;
   max-width: 900px;
-  margin-top: 1rem;
   margin-left: 14.5rem;
   padding-bottom: 1rem;
   width: 100%;
 }
+
+.rectangle {
+  width:100%;
+  height: 200px;
+  background:#29b6f6;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
 
