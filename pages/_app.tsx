@@ -22,7 +22,7 @@ function MyApp({Component, pageProps}: AppProps) {
     
     useEffect(() => {
       document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0;
+      document.documentElement.scrollTop = 1;
       loading ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'visible';
     })
 
