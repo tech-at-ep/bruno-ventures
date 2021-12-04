@@ -28,7 +28,8 @@ function ValidateApp(app : Application) : boolean {
 }
 
 function Card({setAccentColor} : CardProps) {
-    const addStartup = firebaseClient.functions().httpsCallable('addStartup');
+    // const addStartup = firebaseClient.functions().httpsCallable('addStartup');
+    // const addStartup = (app : Application) => {};
     const [app, updateApp] = useState<Application>({
         name: '',
         website: '',
@@ -45,7 +46,7 @@ function Card({setAccentColor} : CardProps) {
     });
 
     const addItem = () => {
-        addStartup({app});
+        // addStartup({app});
         console.log(app);
     };
 

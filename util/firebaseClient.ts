@@ -1,6 +1,4 @@
-// @ts-ignore
-import firebase from 'firebase';
-import {FirebaseError} from "@firebase/util";
+import {initializeApp, getApps, FirebaseApp, getApp} from "firebase/app"
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_apiKey,
@@ -11,18 +9,13 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_appId,
     measurementId: process.env.NEXT_PUBLIC_measurementId
 };
-try {
-    if (typeof window !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics()
-    }
-} catch (err) {
-    if (err instanceof FirebaseError) {
-        if (!/already exists/.test(err.message)) {
-            console.error('Firebase initialization error', err.stack)
-        }
-    }
+
+let firebaseApp : FirebaseApp;
+
+if (getApps().length == 0) {
+    firebaseApp = initializeApp(firebaseConfig);
+} else {
+    firebaseApp = getApp();
 }
 
-const firebaseClient = firebase;
-export default firebaseClient;
+export default firebaseApp;
