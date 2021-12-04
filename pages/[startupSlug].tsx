@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useAuth } from "../util/firebaseAuthHelpers";
+import opensea from '../images/opensea_logo.png'
 
 export default function Startup() {
     const router = useRouter();
@@ -9,12 +10,21 @@ export default function Startup() {
 
     return (
         <div className="">
-            <div className="h-96 bg-blue-500" />
-            <div className="max-w-3xl mx-auto -mt-32">
-                <h1 className="text-6xl font-bold text-white">
-                    At a glance: OpenSea
-                </h1>
+            <div className="bg-blue-500">
+                <div className="max-w-3xl px-4 mx-auto h-72 relative overflow-x-hidden">
+                    <div className="absolute bottom-0">
+                        <div>
+                            <img src={opensea.src} className="h-24 w-24" />
+                        </div>
+                        <h1 className="text-3xl md:text-5xl font-bold text-white">
+                            At a glance: OpenSea
+                        </h1>
+                    </div>
+                </div>
 
+
+            </div>
+            <div className="max-w-3xl px-4 mx-auto mt-6">
                 <div className="flex justify-start items-center space-x-8 mb-8">
 
                     <div>
