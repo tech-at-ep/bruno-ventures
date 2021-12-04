@@ -27,27 +27,31 @@ function ValidateApp(app : Application) : boolean {
     return true;
 }
 
+const empty = {
+    name: '',
+    website: '',
+    founders: '',
+    twitter: '',
+    instagram: '',
+    facebook: '',
+    linkedin: '',
+    email: '',
+    mission: '',
+    industry: '',
+    accentColor: '',
+    imageData: ''
+}
+
 function Card({setAccentColor} : CardProps) {
-    // const addStartup = firebaseClient.functions().httpsCallable('addStartup');
-    // const addStartup = (app : Application) => {};
-    const [app, updateApp] = useState<Application>({
-        name: '',
-        website: '',
-        founders: '',
-        twitter: '',
-        instagram: '',
-        facebook: '',
-        linkedin: '',
-        email: '',
-        mission: '',
-        industry: '',
-        accentColor: '',
-        imageData: ''
-    });
+
+    const addStartUp = firebaseClient.functions().httpsCallable('addStartUp');
+    const [app, updateApp] = useState<Application>(empty);
 
     const addItem = () => {
-        // addStartup({app});
-        console.log(app);
+        if (ValidateApp(app)){
+            addStartUp({app});
+            console.log(app);
+        }
     };
 
     const setProperty = (property: string, value: string) => {
@@ -57,12 +61,32 @@ function Card({setAccentColor} : CardProps) {
         });
     };
 
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+        addItem();
+        reset();
+        updateApp(empty);
+    };
+
+    const reset = () => {
+        Array.from(document.querySelectorAll("input")).forEach(
+          input => (input.value = "")
+        );
+        Array.from(document.querySelectorAll("textarea")).forEach(
+            textarea => (textarea.value = "")
+        );
+        Array.from(document.querySelectorAll("select")).forEach(
+            select => (select.value = "")
+        );
+      };
+
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
                 <TextForm setProperty={setProperty} addItem={addItem}/>
                 <LogoForm setAccentColor={setAccentColor} setProperty={setProperty}/>
+                <button onClick={handleSubmit}> submit</button>  
             </div>
         </div>
     )
@@ -99,13 +123,7 @@ interface TextFormProps {
     addItem : () => void;
 }
 
-function TextForm({setProperty, addItem} : TextFormProps) {
-
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        addItem();
-    };
-
+function TextForm({setProperty} : TextFormProps) {
     return (
         <div className={`${styles.text_form_container}`}>
             <form>
@@ -148,8 +166,7 @@ function TextForm({setProperty, addItem} : TextFormProps) {
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>   
-                <button onClick={handleSubmit}> submit</button>             
+                    </select>              
             </form>
         </div>
     )}
@@ -320,14 +337,3 @@ export default function Form() {
     )
 }
 
-// <div>
-//     <img className={`${styles.bottom_right_vector} ${styles.noselect} ${styles.nodrag}`} src="/form_vector_2.svg" />
-//     <div className={styles.form_title}>
-//         <div>Welcome to</div>
-//         <div>Bruno Ventures.</div>
-//     </div>
-//     <div className={`${styles.container}`}>
-//         {/* <h1>TODO: For form page</h1> */}
-//         <Card />
-//     </div>
-// </div>
