@@ -3,12 +3,16 @@ import styles from '../styles/Form.module.css'
 import firebaseClient from "../util/firebaseClient";
 // import Select from 'react-select';
 // import cx from 'classnames';
-import {createRef, useState, Dispatch, SetStateAction} from 'react';
+import {createRef, useState, Dispatch, SetStateAction, useEffect} from 'react';
 //@ts-ignore
 import { hexToCSSFilter } from "hex-to-css-filter";
 
+
 interface CardProps {
-    setAccentColor : Dispatch<SetStateAction<string>>
+    accentColor: string;
+    setAccentColor : Dispatch<SetStateAction<string>>;
+    resetForm: Dispatch<SetStateAction<boolean>>;
+    isSubmitted: boolean;
 }
 
 function ValidateApp(app : Application) : boolean {
@@ -27,27 +31,30 @@ function ValidateApp(app : Application) : boolean {
     return true;
 }
 
-function Card({setAccentColor} : CardProps) {
-    const addStartup = firebaseClient.functions().httpsCallable('addStartup');
-    const [app, updateApp] = useState<Application>({
-        name: '',
-        website: '',
-        founders: '',
-        twitter: '',
-        instagram: '',
-        facebook: '',
-        linkedin: '',
-        email: '',
-        mission: '',
-        industry: '',
-        accentColor: '',
-        imageData: ''
-    });
+const empty = {
+    name: '',
+    website: '',
+    founders: '',
+    twitter: '',
+    instagram: '',
+    facebook: '',
+    linkedin: '',
+    email: '',
+    mission: '',
+    industry: '',
+    accentColor: '',
+    imageData: '',
+    approved: false,
+}
 
-    const addItem = () => {
-        addStartup({app});
-        console.log(app);
-    };
+function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps) {
+
+    const addStartUp = firebaseClient.functions().httpsCallable('addStartUp');
+    // const query = firebaseClient.functions().httpsCallable('notionTest');
+    const titleColor = perceievedLuminance(hexToRgb(accentColor)) > 220 ? 
+    '#000000' : 
+    '#ffffff';
+    const [app, updateApp] = useState<Application>(empty);
 
     const setProperty = (property: string, value: string) => {
         updateApp({
@@ -56,12 +63,38 @@ function Card({setAccentColor} : CardProps) {
         });
     };
 
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+        if (ValidateApp(app)){
+            addStartUp({app});}
+        reset();
+        updateApp(empty);
+    };
+
+    const reset = () => {
+        Array.from(document.querySelectorAll("input")).forEach(
+          input => (input.value = "")
+        );
+        Array.from(document.querySelectorAll("textarea")).forEach(
+            textarea => (textarea.value = "")
+        );
+        Array.from(document.querySelectorAll("select")).forEach(
+            select => (select.value = "")
+        );
+        resetForm(true);
+      };
+
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
-                <TextForm setProperty={setProperty} addItem={addItem}/>
-                <LogoForm setAccentColor={setAccentColor} setProperty={setProperty}/>
+                <TextForm setProperty={setProperty}/>
+                <LogoForm setAccentColor={setAccentColor} setProperty={setProperty} isSubmitted={isSubmitted}/>
+                <div className={styles.padding}>
+                    <button className={styles.button} onClick={handleSubmit} style={{background: accentColor, color: titleColor}}>
+                         Submit
+                    </button>
+                </div>
             </div>
         </div>
     )
@@ -80,6 +113,7 @@ type Application = {
     industry: string;
     accentColor: string;
     imageData: string;
+    approved: boolean;
 }
 
 const options = [
@@ -98,13 +132,7 @@ interface TextFormProps {
     addItem : () => void;
 }
 
-function TextForm({setProperty, addItem} : TextFormProps) {
-
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        addItem();
-    };
-
+function TextForm({setProperty} : TextFormProps) {
     return (
         <div className={`${styles.text_form_container}`}>
             <form>
@@ -147,8 +175,7 @@ function TextForm({setProperty, addItem} : TextFormProps) {
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>   
-                <button onClick={handleSubmit}> submit</button>             
+                    </select>              
             </form>
         </div>
     )}
@@ -201,15 +228,22 @@ function perceievedLuminance(color : RGB): number {
 interface LogoFormProps {
     setAccentColor : Dispatch<SetStateAction<string>>;
     setProperty : (arg0 : string, arg1 : string) => void;
+    isSubmitted : boolean;
 }
 
-function LogoForm({ setAccentColor, setProperty } : LogoFormProps) {
+function LogoForm({ setAccentColor, setProperty, isSubmitted} : LogoFormProps) {
     const fileInputRef = createRef<HTMLInputElement>();
     const colorInputRef = createRef<HTMLInputElement>();
 
     const [image, setImage] = useState<string>("");
     const [accentColor, setLocalAccentColor] = useState<string>("#FF5A5F")
     const [uploadedFile, setUploadedFile] = useState<File>();
+
+    useEffect(() => {
+        if (isSubmitted){
+            setLocalAccentColor("#FF5A5F");
+        }
+    })
 
     const onLogoUploaded = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files[0]) {
@@ -303,30 +337,29 @@ export default function Form() {
     const titleColor = perceievedLuminance(hexToRgb(accentColor)) > 220 ? 
         '#000000' : 
         '#ffffff';
+
+    const [isSubmitted, resetForm] = useState(false);
+    useEffect(() => {
+        if (isSubmitted){
+            setAccentColor("#FF5A5F");
+            resetForm(false);
+        }
+    })
+
     return (
-        <div style={{position: 'relative'}}>
+        <div className={styles.form_container} style={{position: 'relative'}}>
             <FirstVector accentColor={accentColor}/>
             <SecondVector accentColor={accentColor}/>
             <div className={styles.form_title} style={{color: titleColor}}>
-                <div style={{marginBottom:'0px', padding: '0px'}}>Welcome to</div>
-                <div style={{marginTop:'-1rem', padding: '0px'}}>Bruno Ventures.</div>
+                <div style={{marginBottom:'0px', paddingTop: '2rem'}}>Welcome to</div>
+                <div style={{marginTop:'-0.7rem'}}>Bruno Ventures.</div>
             </div>
             <div className={`${styles.container}`}>
-                <Card setAccentColor={setAccentColor}/>            
+                <Card setAccentColor={setAccentColor} 
+                    accentColor={accentColor} titleColor={titleColor} 
+                    resetForm={resetForm} isSubmitted={isSubmitted}/>            
             </div>
        </div>
         
     )
 }
-
-// <div>
-//     <img className={`${styles.bottom_right_vector} ${styles.noselect} ${styles.nodrag}`} src="/form_vector_2.svg" />
-//     <div className={styles.form_title}>
-//         <div>Welcome to</div>
-//         <div>Bruno Ventures.</div>
-//     </div>
-//     <div className={`${styles.container}`}>
-//         {/* <h1>TODO: For form page</h1> */}
-//         <Card />
-//     </div>
-// </div>
