@@ -8,6 +8,8 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer';
 import Startups from './startups';
 
+import { isMobile } from 'react-device-detect';
+
 import logo from "../assets/logo.jpeg";
 
 export default function Home() {
@@ -30,25 +32,50 @@ export default function Home() {
 
     setTimeout(StopLoading, 2000);
 
-    return (
-        <div>
-            {loading && <SplashScreen fading={fading}/>}
-            <div className="box-border">
-                <div className="flex flex-col">
-                    <Navbar/>
-                    <Hero 
-                    tagLine={'Startups start here.'}
-                    />
-                    <div id="divider" className="rounded-full ring-2 ring-gray-200 lg:w-1/2 lg:mx-auto " />
-                </div>
-                <div className="relative top-48">
-                    <Startups/>
-                </div>
-                
-                <div className="relative top-96 h-2 my-24">
-                    <Footer logo={logo}/>
+    if (!isMobile){
+        return (
+            <div>
+                {loading && <SplashScreen fading={fading}/>}
+                <div className="box-border">
+                    <div className="flex flex-col">
+                        <Navbar/>
+                        <Hero 
+                        tagLine={'Startups start here.'} isMobile={false}
+                        />
+                        <div id="divider" className="rounded-full ring-2 ring-gray-200 lg:w-1/2 lg:mx-auto " />
+                    </div>
+                    <div className="relative top-48">
+                        <Startups isMobile={false}/>
+                    </div>
+                    
+                    <div className="relative top-96 h-2 my-24">
+                        <Footer logo={logo}/>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
+        )
+    } else {
+        // mobile view
+        return (
+            <div>
+                {loading && <SplashScreen fading={fading}/>}
+                <div className="box-border">
+                    <div className="flex flex-col">
+                        <Navbar/>
+                        <Hero 
+                        tagLine={'Startups start here.'} isMobile={true}
+                        />
+                        <div id="divider" className="rounded-full ring-2 ring-gray-200 lg:w-1/2 lg:mx-auto " />
+                    </div>
+                    <div className="relative top-48">
+                        <Startups isMobile={true}/>
+                    </div>
+                    
+                    <div className="relative top-96 h-2 my-24">
+                        <Footer logo={logo}/>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }

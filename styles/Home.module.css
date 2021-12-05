@@ -9,6 +9,17 @@
   height: 100vh;
 }
 
+.containerMobile {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  margin-top: 32rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .main {
   padding: 5rem 0;
   flex: 1;
@@ -82,6 +93,18 @@
   max-height: 800px;
 }
 
+.gridMobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin-top: 3rem;
+  padding-bottom: 3rem;
+  width: 100%;
+  max-height: 800px;
+}
+
 .dropdown {
   display: flex;
   align-items: left;
@@ -90,6 +113,18 @@
   max-width: 900px;
   margin-top: 1rem;
   margin-left: 14.5rem;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+.dropdownMoblie {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin-top: 1rem;
+  margin-left: 1rem;
   padding-bottom: 1rem;
   width: 100%;
 }
@@ -109,6 +144,20 @@
   transition: color 0.15s ease, border-color 0.15s ease;
   width: 14rem;
   height: 14rem;
+  cursor: pointer;
+}
+
+.cardMobile {
+  margin: 1rem;
+  overflow: hidden;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 20px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  width: 8rem;
+  height: 8rem;
   cursor: pointer;
 }
 
