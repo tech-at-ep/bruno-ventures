@@ -28,35 +28,26 @@ function ValidateApp(app : Application) : boolean {
     return true;
 }
 
+const empty = {
+    name: '',
+    website: '',
+    founders: '',
+    twitter: '',
+    instagram: '',
+    facebook: '',
+    linkedin: '',
+    email: '',
+    mission: '',
+    industry: '',
+    accentColor: '',
+    imageData: '',
+    approved: false,
+}
+
 function Card({setAccentColor} : CardProps) {
-    const addStartup = firebaseClient.functions().httpsCallable('addStartUp');
-    // const updateStartup = firebaseClient.functions().httpsCallable('notionTest');
-    const [app, updateApp] = useState<Application>({
-        name: '',
-        website: '',
-        founders: '',
-        twitter: '',
-        instagram: '',
-        facebook: '',
-        linkedin: '',
-        email: '',
-        mission: '',
-        industry: '',
-        accentColor: '',
-        imageData: '',
-        approved: false,
-    });
 
-    // const handleUpdate = (event: any) => {
-    //     updateStartup();
-    // }
-
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
-        addStartup({app});
-        console.log(app);
-        console.log(app['approved']);
-    };
+    const addStartUp = firebaseClient.functions().httpsCallable('addStartUp');
+    const [app, updateApp] = useState<Application>(empty);
 
     const setProperty = (property: string, value: string) => {
         updateApp({
@@ -65,13 +56,33 @@ function Card({setAccentColor} : CardProps) {
         });
     };
 
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+        if (ValidateApp(app)){
+            addStartUp({app});}
+        reset();
+        updateApp(empty);
+    };
+
+    const reset = () => {
+        Array.from(document.querySelectorAll("input")).forEach(
+          input => (input.value = "")
+        );
+        Array.from(document.querySelectorAll("textarea")).forEach(
+            textarea => (textarea.value = "")
+        );
+        Array.from(document.querySelectorAll("select")).forEach(
+            select => (select.value = "")
+        );
+      };
+
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
                 <TextForm setProperty={setProperty}/>
                 <LogoForm setAccentColor={setAccentColor} setProperty={setProperty}/>
-                <button onClick={handleSubmit}> submit</button> 
+                <button onClick={handleSubmit}> submit</button>  
             </div>
         </div>
     )
@@ -110,7 +121,6 @@ interface TextFormProps {
 }
 
 function TextForm({setProperty} : TextFormProps) {
-
     return (
         <div className={`${styles.text_form_container}`}>
             <form>
@@ -153,7 +163,7 @@ function TextForm({setProperty} : TextFormProps) {
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>           
+                    </select>              
             </form>
         </div>
     )}
@@ -324,14 +334,3 @@ export default function Form() {
     )
 }
 
-// <div>
-//     <img className={`${styles.bottom_right_vector} ${styles.noselect} ${styles.nodrag}`} src="/form_vector_2.svg" />
-//     <div className={styles.form_title}>
-//         <div>Welcome to</div>
-//         <div>Bruno Ventures.</div>
-//     </div>
-//     <div className={`${styles.container}`}>
-//         {/* <h1>TODO: For form page</h1> */}
-//         <Card />
-//     </div>
-// </div>
