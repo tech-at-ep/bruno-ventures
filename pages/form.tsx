@@ -7,7 +7,6 @@ import {createRef, useState, Dispatch, SetStateAction} from 'react';
 //@ts-ignore
 import { hexToCSSFilter } from "hex-to-css-filter";
 
-
 interface CardProps {
     setAccentColor : Dispatch<SetStateAction<string>>
 }
@@ -29,8 +28,7 @@ function ValidateApp(app : Application) : boolean {
 }
 
 function Card({setAccentColor} : CardProps) {
-    const addStartup = firebaseClient.functions().httpsCallable('addStartUp');
-    // const updateStartup = firebaseClient.functions().httpsCallable('notionTest');
+    const addStartup = firebaseClient.functions().httpsCallable('addStartup');
     const [app, updateApp] = useState<Application>({
         name: '',
         website: '',
@@ -43,19 +41,12 @@ function Card({setAccentColor} : CardProps) {
         mission: '',
         industry: '',
         accentColor: '',
-        imageData: '',
-        approved: false,
+        imageData: ''
     });
 
-    // const handleUpdate = (event: any) => {
-    //     updateStartup();
-    // }
-
-    const handleSubmit = (event: any) => {
-        event.preventDefault();
+    const addItem = () => {
         addStartup({app});
         console.log(app);
-        console.log(app['approved']);
     };
 
     const setProperty = (property: string, value: string) => {
@@ -69,9 +60,8 @@ function Card({setAccentColor} : CardProps) {
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
-                <TextForm setProperty={setProperty}/>
+                <TextForm setProperty={setProperty} addItem={addItem}/>
                 <LogoForm setAccentColor={setAccentColor} setProperty={setProperty}/>
-                <button onClick={handleSubmit}> submit</button> 
             </div>
         </div>
     )
@@ -90,7 +80,6 @@ type Application = {
     industry: string;
     accentColor: string;
     imageData: string;
-    approved: boolean;
 }
 
 const options = [
@@ -109,7 +98,12 @@ interface TextFormProps {
     addItem : () => void;
 }
 
-function TextForm({setProperty} : TextFormProps) {
+function TextForm({setProperty, addItem} : TextFormProps) {
+
+    const handleSubmit = (event: any) => {
+        event.preventDefault();
+        addItem();
+    };
 
     return (
         <div className={`${styles.text_form_container}`}>
@@ -153,7 +147,8 @@ function TextForm({setProperty} : TextFormProps) {
                     <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
                         <option value="">Select Your Industry</option>
                         {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>           
+                    </select>   
+                <button onClick={handleSubmit}> submit</button>             
             </form>
         </div>
     )}
