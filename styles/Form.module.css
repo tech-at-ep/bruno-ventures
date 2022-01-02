@@ -35,6 +35,10 @@
   }
 }
 
+.container label {
+  display: none;
+}
+
 .info_form {
   grid-column: 1 / span 2;
 }

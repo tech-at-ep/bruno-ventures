@@ -357,7 +357,7 @@ export default function Form() {
             </div>
             <div className={`${styles.container}`}>
                 <Card setAccentColor={setAccentColor} 
-                    accentColor={accentColor} titleColor={titleColor} 
+                    accentColor={accentColor} 
                     resetForm={resetForm} isSubmitted={isSubmitted}/>            
             </div>
        </div>
