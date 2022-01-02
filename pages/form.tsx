@@ -4,13 +4,16 @@ import firebaseApp from "../util/firebaseApp";
 // import Select from 'react-select';
 // import cx from 'classnames';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import {createRef, useState, Dispatch, SetStateAction} from 'react';
+import {createRef, useState, Dispatch, SetStateAction, useEffect} from 'react';
 //@ts-ignore
 import { hexToCSSFilter } from "hex-to-css-filter";
 
 
 interface CardProps {
-    setAccentColor : Dispatch<SetStateAction<string>>
+    accentColor: string;
+    setAccentColor : Dispatch<SetStateAction<string>>;
+    resetForm: Dispatch<SetStateAction<boolean>>;
+    isSubmitted: boolean;
 }
 
 function ValidateApp(app : Application) : boolean {
@@ -45,9 +48,13 @@ const empty = {
     approved: false,
 }
 
-function Card({setAccentColor} : CardProps) {
+function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps) {
     const functions = getFunctions(firebaseApp)
     const addStartUp = httpsCallable(functions, 'addStartUp');
+    // const query = firebaseClient.functions().httpsCallable('notionTest');
+    const titleColor = perceievedLuminance(hexToRgb(accentColor)) > 220 ? 
+    '#000000' : 
+    '#ffffff';
     const [app, updateApp] = useState<Application>(empty);
 
     const setProperty = (property: string, value: string) => {
@@ -75,6 +82,7 @@ function Card({setAccentColor} : CardProps) {
         Array.from(document.querySelectorAll("select")).forEach(
             select => (select.value = "")
         );
+        resetForm(true);
       };
 
     return (
@@ -82,8 +90,12 @@ function Card({setAccentColor} : CardProps) {
             <div className={styles.form_card_header}>List Your Startup</div>            
             <div className={styles.form_body}>
                 <TextForm setProperty={setProperty}/>
-                <LogoForm setAccentColor={setAccentColor} setProperty={setProperty}/>
-                <button onClick={handleSubmit}> submit</button>  
+                <LogoForm setAccentColor={setAccentColor} setProperty={setProperty} isSubmitted={isSubmitted}/>
+                <div className={styles.padding}>
+                    <button className={styles.button} onClick={handleSubmit} style={{background: accentColor, color: titleColor}}>
+                         Submit
+                    </button>
+                </div>
             </div>
         </div>
     )
@@ -217,15 +229,22 @@ function perceievedLuminance(color : RGB): number {
 interface LogoFormProps {
     setAccentColor : Dispatch<SetStateAction<string>>;
     setProperty : (arg0 : string, arg1 : string) => void;
+    isSubmitted : boolean;
 }
 
-function LogoForm({ setAccentColor, setProperty } : LogoFormProps) {
+function LogoForm({ setAccentColor, setProperty, isSubmitted} : LogoFormProps) {
     const fileInputRef = createRef<HTMLInputElement>();
     const colorInputRef = createRef<HTMLInputElement>();
 
     const [image, setImage] = useState<string>("");
     const [accentColor, setLocalAccentColor] = useState<string>("#FF5A5F")
     const [uploadedFile, setUploadedFile] = useState<File>();
+
+    useEffect(() => {
+        if (isSubmitted){
+            setLocalAccentColor("#FF5A5F");
+        }
+    })
 
     const onLogoUploaded = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || !event.target.files[0]) {
@@ -319,16 +338,27 @@ export default function Form() {
     const titleColor = perceievedLuminance(hexToRgb(accentColor)) > 220 ? 
         '#000000' : 
         '#ffffff';
+
+    const [isSubmitted, resetForm] = useState(false);
+    useEffect(() => {
+        if (isSubmitted){
+            setAccentColor("#FF5A5F");
+            resetForm(false);
+        }
+    })
+
     return (
-        <div style={{position: 'relative'}}>
+        <div className={styles.form_container} style={{position: 'relative'}}>
             <FirstVector accentColor={accentColor}/>
             <SecondVector accentColor={accentColor}/>
             <div className={styles.form_title} style={{color: titleColor}}>
-                <div style={{marginBottom:'0px', padding: '0px'}}>Welcome to</div>
-                <div style={{marginTop:'-1rem', padding: '0px'}}>Bruno Ventures.</div>
+                <div style={{marginBottom:'0px', paddingTop: '2rem'}}>Welcome to</div>
+                <div style={{marginTop:'-0.7rem'}}>Bruno Ventures.</div>
             </div>
             <div className={`${styles.container}`}>
-                <Card setAccentColor={setAccentColor}/>            
+                <Card setAccentColor={setAccentColor} 
+                    accentColor={accentColor} titleColor={titleColor} 
+                    resetForm={resetForm} isSubmitted={isSubmitted}/>            
             </div>
        </div>
         
