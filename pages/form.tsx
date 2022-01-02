@@ -1,8 +1,9 @@
 import styles from '../styles/Form.module.css'
 // import React, { useState } from 'react';
-import firebaseClient from "../util/firebaseClient";
+import firebaseApp from "../util/firebaseApp";
 // import Select from 'react-select';
 // import cx from 'classnames';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import {createRef, useState, Dispatch, SetStateAction} from 'react';
 //@ts-ignore
 import { hexToCSSFilter } from "hex-to-css-filter";
@@ -45,8 +46,8 @@ const empty = {
 }
 
 function Card({setAccentColor} : CardProps) {
-
-    const addStartUp = firebaseClient.functions().httpsCallable('addStartUp');
+    const functions = getFunctions(firebaseApp)
+    const addStartUp = httpsCallable(functions, 'addStartUp');
     const [app, updateApp] = useState<Application>(empty);
 
     const setProperty = (property: string, value: string) => {
@@ -117,7 +118,7 @@ const options = [
 
 interface TextFormProps {
     setProperty : (arg0 : string, arg1 : string) => void;
-    addItem : () => void;
+    // addItem : () => void;
 }
 
 function TextForm({setProperty} : TextFormProps) {
