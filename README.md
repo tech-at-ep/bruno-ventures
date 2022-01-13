@@ -1,6 +1,6 @@
 # 🐻 Bruno Ventures
 
-Tailwind CSS, Next.js, Firebase
+Brown University’s entrepreneurial landscape is rich and diverse, encompassing the most innovative student minds in the world. Powered by the Nelson Center for Entrepreneurship and the Brown Entrepreneurship Program (EP), Bruno Ventures serves as a hub for learning about student entrepreneurs and startups within the Brown community.
 
 ## Getting Started
 
