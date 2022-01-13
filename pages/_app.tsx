@@ -15,6 +15,7 @@ function MyApp({Component, pageProps}: AppProps) {
         </Head>
         <Component {...pageProps} />
     </FirebaseAuthProvider>)
+    // return <Component {...pageProps} />
 }
 
 export default MyApp
