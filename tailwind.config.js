@@ -23,10 +23,14 @@ module.exports = {
         'lg': '700px'
         },
       extend: {
+        fontFamily: {
+          'inter': "'Inter', sans-serif"
+        },
         backgroundImage: theme => ({
          'hero': "url('~/assets/brown.jpeg')"
         }),
       },
+      
   },
   variants: {
     extend: {
