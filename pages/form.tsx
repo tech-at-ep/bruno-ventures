@@ -26,7 +26,7 @@ function ValidateApp(app : Application) : boolean {
         return false; 
     } else if (!emailReg.test(app.email.toLowerCase())) {
         return false;
-    } else if (app.founders.split(' ').length < 2) {
+    } else if (app.founders.split(' ').length < 1) {
         return false;
     }
     return true;
@@ -67,8 +67,11 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        if (ValidateApp(app)){
-            addStartUp({app});}
+        console.log(app)
+        addStartUp({app});
+        // if (ValidateApp(app)){
+        //     // console.log("validated")
+        //     addStartUp({app});}
         reset();
         updateApp(empty);
     };
