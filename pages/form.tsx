@@ -41,6 +41,7 @@ const empty = {
     facebook: '',
     linkedin: '',
     email: '',
+    year: '',
     mission: '',
     industry: '',
     accentColor: '',
@@ -111,6 +112,7 @@ type Application = {
     founders: string;
     email: string;
     mission: string;
+    year: string;
     industry: string;
     accentColor: string;
     imageData: string;
@@ -170,13 +172,16 @@ function TextForm({setProperty} : TextFormProps) {
                 </div>
                 
                 <label> mission statement:</label>
-                    <textarea className={styles.textarea} placeholder="Company Description" name="mission" onChange={e => setProperty("mission", e.target.value)}></textarea>
-                
-                <label> industry:</label>
-                    <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
-                        <option value="">Select Your Industry</option>
-                        {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>              
+                    <textarea className={styles.textarea} placeholder="Company Description / Mission Statement" name="mission" onChange={e => setProperty("mission", e.target.value)}></textarea>
+                <div className={styles.socials}>
+                    <label> founding year:</label>
+                    <input className={styles.handle} placeholder="Founding Year" type="text" name="year" onChange={e => setProperty("year", e.target.value)}></input>
+                    <label> industry:</label>
+                        <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
+                            <option value="">Select Your Industry</option>
+                            {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
+                        </select> 
+                </div>             
             </form>
         </div>
     )}

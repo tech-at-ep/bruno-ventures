@@ -358,6 +358,7 @@
 
 .select{
   composes: input;
+  composes: handle;
 }
 
 .select:invalid{
