@@ -131,6 +131,7 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
         resetForm(true);
       };
 
+    
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
@@ -139,7 +140,7 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
                 <LogoForm setAccentColor={setAccentColor} setProperty={setProperty} isSubmitted={isSubmitted}/>
                 <div className={styles.padding}>
                     <button className={styles.button} onClick={handleSubmit} style={{background: accentColor, color: titleColor}}>
-                         Submit
+                        Submit
                     </button>
                 </div>
             </div>
@@ -393,7 +394,6 @@ export default function Form() {
     useEffect(() => {
         if (isSubmitted){
             setAccentColor("#FF5A5F");
-            resetForm(false);
         }
     })
 
