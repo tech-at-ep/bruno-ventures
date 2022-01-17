@@ -16,32 +16,74 @@ interface CardProps {
     isSubmitted: boolean;
 }
 
-function ValidateApp(app : Application) : boolean {
-    const urlReg = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-    const emailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    
-    if (Object.values(app).includes('')) { 
-        return false; 
-    } else if (!urlReg.test(app.website)) {
-        return false; 
-    } else if (!emailReg.test(app.email.toLowerCase())) {
-        return false;
-    } else if (app.founders.split(' ').length < 2) {
-        return false;
+function ValidateApp(app : Application) : string {
+
+    const keysMap: Record<string, string> = {
+        name: 'Startup name',
+        website: 'Website link',
+        year: 'Founding year',
+        mission: 'Company Description/ Mission Statement',
+        imageData: 'Logo'
     }
-    return true;
+
+    const socials = ["twitter", "facebook", "instagram", "linkedin", "accentColor"]
+    let error = ""
+    let errFound = false;
+    Object.entries(app).forEach(
+        ([key, value]) => {
+            if (value === "" && !(socials.some(a => a === key))) {
+                let field = key.charAt(0).toUpperCase() + key.slice(1);
+                if (key in keysMap){
+                    field = keysMap[key];
+                }
+                if (!errFound) {
+                    error = field + " must not be empty";
+                    errFound = true;
+                }
+            }
+    });
+    if (error != "") {
+        return error
+    }
+    
+    const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    if (!emailFormat.test(app.email.toLowerCase())) {
+        return "Must submit a valid email";
+    }
+
+    const urlFormat = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i');
+    if (!urlFormat.test(app["website"])) {
+        return "Must submit a valid website";
+    }
+
+    if (app["twitter"] === "" && app["instagram"] === "" 
+    && app["facebook"] === "" && app["linkedin"] === "") {
+        return "Must submit at least one social media handle";
+    }
+
+    if (isNaN(parseInt(app['year']))){
+        return "Must submit a valid founding year (e.g. 2020)";
+    }
+
+    return error;
 }
 
 const empty = {
     name: '',
-    website: '',
     founders: '',
+    email: '',
+    website: '',
     twitter: '',
     instagram: '',
     facebook: '',
     linkedin: '',
-    email: '',
     mission: '',
+    year: '',
     industry: '',
     accentColor: '',
     imageData: '',
@@ -51,7 +93,6 @@ const empty = {
 function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps) {
     const functions = getFunctions(firebaseApp)
     const addStartUp = httpsCallable(functions, 'addStartUp');
-    // const query = firebaseClient.functions().httpsCallable('notionTest');
     const titleColor = perceievedLuminance(hexToRgb(accentColor)) > 220 ? 
     '#000000' : 
     '#ffffff';
@@ -66,13 +107,18 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        if (ValidateApp(app)){
-            addStartUp({app});}
-        reset();
-        updateApp(empty);
+        const error = ValidateApp(app)
+        if (error === ""){
+            console.log("validated")
+            addStartUp({app});
+            reset();
+        } else {
+            alert(error);
+        }
     };
 
     const reset = () => {
+        updateApp(empty);
         Array.from(document.querySelectorAll("input")).forEach(
           input => (input.value = "")
         );
@@ -85,6 +131,7 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
         resetForm(true);
       };
 
+    
     return (
         <div className={styles.form_card}>
             <div className={styles.form_card_header}>List Your Startup</div>            
@@ -93,7 +140,7 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
                 <LogoForm setAccentColor={setAccentColor} setProperty={setProperty} isSubmitted={isSubmitted}/>
                 <div className={styles.padding}>
                     <button className={styles.button} onClick={handleSubmit} style={{background: accentColor, color: titleColor}}>
-                         Submit
+                        Submit
                     </button>
                 </div>
             </div>
@@ -103,14 +150,15 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
 
 type Application = {
     name: string;
+    founders: string;
+    email: string;
     website: string;
     twitter: string;
     facebook: string;
     instagram: string;
     linkedin: string;
-    founders: string;
-    email: string;
     mission: string;
+    year: string;
     industry: string;
     accentColor: string;
     imageData: string;
@@ -131,6 +179,7 @@ const options = [
 interface TextFormProps {
     setProperty : (arg0 : string, arg1 : string) => void;
     // addItem : () => void;
+    
 }
 
 function TextForm({setProperty} : TextFormProps) {
@@ -138,15 +187,13 @@ function TextForm({setProperty} : TextFormProps) {
         <div className={`${styles.text_form_container}`}>
             <form>
                 <label> startup name:</label>
-                <input className={styles.input}  placeholder="Startup Name" type="text" name="name" onChange={e => setProperty("name", e.target.value)}></input>
+                <input className={styles.input} placeholder="Startup Name" type="text" name="name" onChange={e => setProperty("name", e.target.value)}></input>
                 <label> founders:</label>
                     <input className={styles.input} placeholder="Founders" type="text" name="founders" onChange={e => setProperty("founders", e.target.value)}></input>
                 <label> emails:</label>
                     <input className={styles.input} placeholder="Email" type="email" name="emails" onChange={e => setProperty("email", e.target.value)}></input>
-                
                 <label> website:</label>
                     <input className={styles.input} placeholder="Website Link" type="text" name="website" onChange={e => setProperty("website", e.target.value)}></input>
-                
                 <label> social media handles:</label>
                 <div className={styles.socials}>
                     <input className={styles.handle} placeholder="Twitter" type="text" name="handles" onChange={e => {
@@ -170,13 +217,16 @@ function TextForm({setProperty} : TextFormProps) {
                 </div>
                 
                 <label> mission statement:</label>
-                    <textarea className={styles.textarea} placeholder="Company Description" name="mission" onChange={e => setProperty("mission", e.target.value)}></textarea>
-                
-                <label> industry:</label>
-                    <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
-                        <option value="">Select Your Industry</option>
-                        {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
-                    </select>              
+                    <textarea className={styles.textarea} placeholder="Company Description / Mission Statement" name="mission" onChange={e => setProperty("mission", e.target.value)}></textarea>
+                <div className={styles.socials}>
+                    <label> founding year:</label>
+                    <input className={styles.handle} placeholder="Founding Year" type="text" name="year" onChange={e => setProperty("year", e.target.value)}></input>
+                    <label> industry:</label>
+                        <select required className={styles.select} placeholder="Select" name="industry" onChange={e => setProperty("industry", e.target.value)}>
+                            <option value="">Select Your Industry</option>
+                            {options.map(({value, label}, index) => <option value={value}>{label}</option>)}
+                        </select> 
+                </div>             
             </form>
         </div>
     )}
@@ -243,6 +293,7 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted} : LogoFormProps) {
     useEffect(() => {
         if (isSubmitted){
             setLocalAccentColor("#FF5A5F");
+            setImage("");
         }
     })
 
@@ -277,12 +328,12 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted} : LogoFormProps) {
         <div className={styles.logo_form}>
             <div 
                 className={styles.logo_selector}
-                onClick={logoOnClick}
-            >
-                {image == '' && <div style={{marginBottom: '0.5rem'}}>Upload your Logo</div>}
+                onClick={logoOnClick} >
+                <div className="image_upload_text"
+                style={image == '' ? {marginBottom: '0.5rem'} : {display: 'none'}}> Upload your Logo</div>
                 {image == '' ? 
                 <div>
-                    <img style={{opacity: '70%'}} src="/upload_24px.png"/>
+                    <img style={ image == '' ? {opacity: '70%'} : {display: 'none'}} src="/upload_24px.png"/>
                 </div>
                 :
                 <div>
@@ -343,7 +394,6 @@ export default function Form() {
     useEffect(() => {
         if (isSubmitted){
             setAccentColor("#FF5A5F");
-            resetForm(false);
         }
     })
 
