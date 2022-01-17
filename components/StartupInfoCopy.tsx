@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import firebaseApp from "../util/firebaseApp";
 import SplashScreen from "../util/splashscreen";
+import Image from "next/image";
 
 interface SocialMediaProps {
   facebook?: string;
@@ -34,12 +35,20 @@ function SocialMedia({
         </a>
       )}
       {instagram && (
-        <a href={instagram} target="_blank" rel="noreferrer">
+        <a
+          href={`https://www.instagram.com/${instagram.replaceAll("@", "")}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           <Instagram className="" />
         </a>
       )}
       {twitter && (
-        <a href={twitter} target="_blank" rel="noreferrer">
+        <a
+          href={`https://twitter.com/${twitter.replaceAll("@", "")}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           <Twitter className="" />
         </a>
       )}
@@ -81,23 +90,34 @@ export default function StartupInfoCopy() {
   );
 
   useEffect(() => {
-    const getData = async () => {
-      const db = getFirestore(firebaseApp);
-      const appsCol = collection(db, "apps");
-      const appQuery = query(appsCol, where("name", "==", "Opensea"));
-      const appsSnapshot = await getDocs(appQuery);
-      const appsList = appsSnapshot.docs.map((doc) => doc.data());
-      if (appsList.length > 0) {
-        setCompanyData(appsList[0] as CompanyData);
+    console.log(startupSlug);
+    if (startupSlug != null) {
+      try {
+        const getData = async () => {
+          const db = getFirestore(firebaseApp);
+          const appsCol = collection(db, "apps");
+          const appQuery = query(
+            appsCol,
+            where("approved", "==", true),
+            where("identifier", "==", startupSlug)
+          );
+          const appsSnapshot = await getDocs(appQuery);
+          const appsList = appsSnapshot.docs.map((doc) => doc.data());
+          if (appsList.length > 0) {
+            setCompanyData(appsList[0] as CompanyData);
+          }
+        };
+        getData();
+      } catch (e) {
+        window.alert(e);
       }
-    };
-    getData();
+    }
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0;
     loading
       ? (document.body.style.overflow = "hidden")
       : (document.body.style.overflow = "visible");
-  });
+  }, [startupSlug]);
 
   // we could definitely have a better solution here but the next.js events for images finishing load are kinda awful
   // they fire like 5 times so its hard to programatically have the splash fade
@@ -113,16 +133,27 @@ export default function StartupInfoCopy() {
   return (
     <div className="font-inter">
       {loading && <SplashScreen fading={fading} />}
-      <div className="bg-blue-500 h-32" />
+      {/* just decided to mix tailwind and inline styles b/c arb color not wokring on tailwind*/}
+      <div
+        className={"h-32"}
+        style={{ backgroundColor: companyData.accentColor }}
+      />
 
-      <div className="-mt-12">
+      <div
+        className="-mt-12 h-36 w-36 mx-auto rounded-full border-4 p-1 border-white bg-white overflow-hidden"
+        style={{ filter: "drop-shadow(0 5px 0.5rem gray)" }}
+      >
         <img
-          src={opensea.src}
-          className="h-36 w-36 mx-auto rounded-full border-8 border-white"
+          className="my-auto object-contain w-full h-full"
+          // className="h-36 w-36 mx-auto rounded-full border-8 border-white"
+          src={
+            // opensea.src
+            companyData.imageData != null ? companyData.imageData : opensea.src
+          }
         />
       </div>
 
-      <div className="max-w-3xl px-4 mx-auto -mt-6">
+      <div className="max-w-3xl px-4 mx-auto -mt-4">
         <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-900">
           At a glance: <span className="font-light">{companyData.name}</span>
         </h1>
@@ -145,19 +176,24 @@ export default function StartupInfoCopy() {
             <div className="font-bold">Founders</div>
             {companyData.founders}
           </div>
-          <div className="px-6 whitespace-nowrap">
-            <div className="font-bold">Socials</div>
-            <SocialMedia
-              facebook={"https://facebook.com"}
-              instagram="https://instagram.com"
-              twitter="https://twitter.com"
-              linkedin="https://linkedin.com"
-            />
-          </div>
+          {(companyData.twitter ||
+            companyData.instagram ||
+            companyData.linkedin ||
+            companyData.facebook) && (
+            <div className="px-6 whitespace-nowrap">
+              <div className="font-bold">Socials</div>
+              <SocialMedia
+                facebook={companyData.twitter}
+                instagram={companyData.instagram}
+                twitter={companyData.twitter}
+                linkedin={companyData.linkedin}
+              />
+            </div>
+          )}
           <div className="px-6 whitespace-nowrap">
             <div className="font-bold">Website</div>
             <a
-              href="https://opensea.io"
+              href={companyData.website}
               className="hover:text-blue-600 text-blue-500 focus:underline"
             >
               {companyData.website}
@@ -165,18 +201,17 @@ export default function StartupInfoCopy() {
           </div>
         </div>
 
-        <div className="border-t pt-6">
-          <span className="font-bold">Mission Statement:</span>{" "}
-          {companyData.mission}
+        <div className="border-t pt-6 text-xl">
+          <span className="font-bold">Description:</span> {companyData.mission}
         </div>
 
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <span className="font-bold">Description:</span> OpenSea is a
           peer-to-peer marketplace for crypto collectibles and non-fungible
           tokens. It includes collectibles, gaming items, and other virtual
           goods backed by a blockchain. On OpenSea, anyone can buy or sell these
           items through a smart contract.
-        </div>
+        </div> */}
       </div>
     </div>
   );
