@@ -1,8 +1,5 @@
 import styles from "../styles/Form.module.css";
-// import React, { useState } from 'react';
 import firebaseApp from "../util/firebaseApp";
-// import Select from 'react-select';
-// import cx from 'classnames';
 import { getFunctions, httpsCallable } from "firebase/functions";
 import {
   createRef,
@@ -11,8 +8,9 @@ import {
   SetStateAction,
   useEffect,
 } from "react";
-//@ts-ignore
-import { hexToCSSFilter } from "hex-to-css-filter";
+import Modal from "@mui/material/Modal";
+import ReactCrop, { Crop } from "react-image-crop";
+import { toast } from "react-toastify";
 
 interface CardProps {
   accentColor: string;
@@ -86,14 +84,14 @@ function ValidateApp(app: Application): string {
     app["facebook"] !== "" &&
     !app["facebook"].includes("https://www.facebook.com/")
   ) {
-    return "If submitting a Facebook, you must submit the entire link to your page";
+    return "If submitting a Facebook, you Must submit the entire link to your page";
   }
 
   if (
     app["linkedin"] !== "" &&
     !app["linkedin"].includes("https://www.linkedin.com/")
   ) {
-    return "If submitting a LinkedIn, you must submit the entire link to your page";
+    return "If submitting a LinkedIn, you Must submit the entire link to your page";
   }
 
   if (isNaN(parseInt(app["year"]))) {
@@ -147,7 +145,7 @@ function Card({
       addStartUp({ app });
       reset();
     } else {
-      alert(error);
+      toast.error(error);
     }
   };
 
@@ -424,7 +422,29 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
 
   const [image, setImage] = useState<string>("");
   const [accentColor, setLocalAccentColor] = useState<string>("#FF5A5F");
-  const [uploadedFile, setUploadedFile] = useState<File>();
+  const [_uploadedFile, setUploadedFile] = useState<File>();
+  const [cropped, setCropped] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleOpen = () => setModalOpen(true);
+  const handleClose = () => {
+    if (cropped) {
+      setModalOpen(false);
+    }
+  };
+
+  const [crop, setCrop] = useState<Crop>({
+    x: 0,
+    y: 0,
+    height: 0,
+    unit: "%",
+    width: 0,
+    aspect: 1,
+  });
+  const [imageElt, setImageElt] = useState<HTMLImageElement | undefined>(
+    undefined
+  );
+  const [croppedImageData, setCroppedImageData] = useState("");
 
   useEffect(() => {
     if (isSubmitted) {
@@ -432,6 +452,40 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
       setImage("");
     }
   });
+
+  const getCroppedImage = (crop: Crop) => {
+    if (!imageElt) {
+      return;
+    }
+    const canvas = document.createElement("canvas");
+    const pixelRatio = window.devicePixelRatio;
+    const scaleX = imageElt.naturalWidth / imageElt.width;
+    const scaleY = imageElt.naturalHeight / imageElt.height;
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) {
+      return;
+    }
+
+    canvas.width = crop.width * pixelRatio * scaleX;
+    canvas.height = crop.height * pixelRatio * scaleY;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+      imageElt,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width * scaleX,
+      crop.height * scaleY
+    );
+    setCroppedImageData(canvas.toDataURL("image/jpeg"));
+  };
 
   const onLogoUploaded = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || !event.target.files[0]) {
@@ -444,6 +498,7 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
         setImage(ev.target.result.toString());
         setProperty("imageData", ev.target.result.toString());
       }
+      handleOpen();
     };
     reader.readAsDataURL(event.target.files[0]);
   };
@@ -462,6 +517,78 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
 
   return (
     <div className={styles.logo_form}>
+      <Modal open={modalOpen} onClose={handleClose}>
+        <div className={styles.upload_modal}>
+          <div className={styles.modal_box} onClick={() => setCropped(true)}>
+            <ReactCrop
+              src={image}
+              crop={crop}
+              ruleOfThirds
+              onImageLoaded={(newElt) => {
+                setCropped(false);
+                setCrop({
+                  x: 0,
+                  y: 0,
+                  height: 0,
+                  unit: "%",
+                  width: 0,
+                  aspect: 1,
+                });
+                setImageElt(newElt);
+                if (newElt.parentElement) {
+                  let height = 50;
+                  let width = 50;
+                  if (newElt.naturalHeight > newElt.naturalWidth) {
+                    width = (newElt.naturalWidth / newElt.naturalHeight) * 50;
+                  } else {
+                    height = (newElt.naturalHeight / newElt.naturalWidth) * 50;
+                  }
+                  newElt.parentElement.style.height = height + "vh";
+                  newElt.parentElement.style.width = width + "vh";
+                }
+              }}
+              onComplete={getCroppedImage}
+              onChange={(newcrop) => setCrop(newcrop)}
+              imageStyle={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+          </div>
+          <div>
+            <button
+              className={styles.button}
+              onClick={() => {
+                if (cropped) {
+                  setImage(croppedImageData);
+                  handleClose();
+                } else {
+                  toast.info(
+                    "Drag on the image or adjust an existing crop box to crop!",
+                    {
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      position: "top-center",
+                      closeOnClick: true,
+                      progress: undefined,
+                      draggable: true,
+                      pauseOnHover: true,
+                    }
+                  );
+                }
+              }}
+              style={{
+                background: "#FF5A5F",
+                color: "#FFFFFF",
+                fontFamily: "Inter",
+              }}
+            >
+              Crop Logo
+            </button>
+          </div>
+        </div>
+      </Modal>
       <div className={styles.logo_selector} onClick={logoOnClick}>
         <div
           className="image_upload_text"

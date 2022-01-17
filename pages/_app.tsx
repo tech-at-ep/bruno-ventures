@@ -1,10 +1,15 @@
 import "../styles/globals.css";
+import "react-image-crop/dist/ReactCrop.css";
+import "react-toastify/dist/ReactToastify.css";
+
 import type { AppProps } from "next/app";
 import {
   FirebaseAuthProvider,
   useFirebaseAuth,
 } from "../util/firebaseAuthHelpers";
 import Head from "next/head";
+
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const firebaseAuthState = useFirebaseAuth();
@@ -18,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <title>🐻 Bruno Ventures</title>
       </Head>
+      <ToastContainer />
       <Component {...pageProps} />
     </FirebaseAuthProvider>
   );
