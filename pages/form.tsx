@@ -108,13 +108,14 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const error = ValidateApp(app)
-        if (error === ""){
-            console.log("validated")
-            addStartUp({app});
-            reset();
-        } else {
-            alert(error);
-        }
+        reset();
+        // if (error === ""){
+        //     console.log("validated")
+        //     addStartUp({app});
+        //     reset();
+        // } else {
+        //     alert(error);
+        // }
     };
 
     const reset = () => {
@@ -128,7 +129,20 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
         Array.from(document.querySelectorAll("select")).forEach(
             select => (select.value = "")
         );
+
+        const btn = document.querySelector("#btn") as HTMLInputElement;
+        const btnText = document.querySelector("#btnText") as HTMLInputElement;
+
+        btnText.innerHTML = "Thanks";
+        btn.classList.add("active");
         resetForm(true);
+
+        setTimeout(function() {
+            console.log('reseted')
+            resetForm(false);
+            btnText.innerHTML = "Submit";
+            btn.classList.remove("active");
+        }, 6000);
       };
 
     
@@ -139,8 +153,13 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
                 <TextForm setProperty={setProperty}/>
                 <LogoForm setAccentColor={setAccentColor} setProperty={setProperty} isSubmitted={isSubmitted}/>
                 <div className={styles.padding}>
-                    <button className={styles.button} onClick={handleSubmit} style={{background: accentColor, color: titleColor}}>
-                        Submit
+                    <button id="btn" className={styles.button} onClick={handleSubmit} style={{background: accentColor, color: titleColor}}>
+                    <p id="btnText">Submit</p>
+                        <div className="check-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+                                <path id="path" fill="transparent" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                            </svg>
+                        </div>
                     </button>
                 </div>
             </div>
