@@ -108,14 +108,13 @@ function Card({setAccentColor, resetForm, isSubmitted, accentColor} : CardProps)
     const handleSubmit = (event: any) => {
         event.preventDefault();
         const error = ValidateApp(app)
-        reset();
-        // if (error === ""){
-        //     console.log("validated")
-        //     addStartUp({app});
-        //     reset();
-        // } else {
-        //     alert(error);
-        // }
+        if (error === ""){
+            console.log("validated")
+            addStartUp({app});
+            reset();
+        } else {
+            alert(error);
+        }
     };
 
     const reset = () => {
