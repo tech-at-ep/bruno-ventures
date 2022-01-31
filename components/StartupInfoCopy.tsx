@@ -140,11 +140,11 @@ export default function StartupInfoCopy() {
       />
 
       <div
-        className="-mt-12 h-36 w-36 mx-auto rounded-full border-4 p-1 border-white bg-white overflow-hidden"
+        className="-mt-12 h-36 w-36 mx-auto rounded-lg border-4 p-1 border-white bg-white overflow-hidden"
         style={{ filter: "drop-shadow(0 5px 0.5rem gray)" }}
       >
         <img
-          className="my-auto object-contain w-full h-full"
+          className="my-auto rounded-lg object-contain w-full h-full"
           // className="h-36 w-36 mx-auto rounded-full border-8 border-white"
           src={
             // opensea.src
@@ -153,7 +153,7 @@ export default function StartupInfoCopy() {
         />
       </div>
 
-      <div className="max-w-3xl px-4 mx-auto -mt-4">
+      <div className="max-w-3xl px-4 mx-auto -mt-2">
         <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-900">
           At a glance: <span className="font-light">{companyData.name}</span>
         </h1>

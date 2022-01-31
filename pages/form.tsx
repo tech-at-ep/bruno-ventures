@@ -562,6 +562,7 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
               onClick={() => {
                 if (cropped) {
                   setImage(croppedImageData);
+                  setProperty("imageData", croppedImageData);
                   handleClose();
                 } else {
                   toast.info(

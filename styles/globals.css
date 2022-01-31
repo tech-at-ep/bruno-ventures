@@ -26,6 +26,7 @@ h1 {
   background-color: #ffffff;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 
 .loading_dot {
