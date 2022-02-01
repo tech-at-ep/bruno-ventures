@@ -61,7 +61,7 @@ function SocialMedia({
   );
 }
 
-interface CompanyData {
+export interface CompanyData {
   accentColor: string;
   approved: boolean;
   email: string;
@@ -75,6 +75,7 @@ interface CompanyData {
   name: string;
   twitter?: string;
   website: string;
+  identifier: string;
 }
 
 export default function StartupInfoCopy() {
@@ -90,7 +91,6 @@ export default function StartupInfoCopy() {
   );
 
   useEffect(() => {
-    console.log(startupSlug);
     if (startupSlug != null) {
       try {
         const getData = async () => {
