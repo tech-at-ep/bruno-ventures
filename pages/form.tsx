@@ -734,9 +734,6 @@ export default function Form() {
     if (isAuthenticated) {
       checkApplied();
     }
-    // if (isSubmitted) {
-    //   setAccentColor("#FF5A5F");
-    // }
     if (loading) {
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0;
@@ -759,6 +756,7 @@ export default function Form() {
               active={processing}
               spinner={true}
               text="Sit tight while we process your application."
+              //@ts-ignore
               styles={{ wrapper: { height: "100%" } }}
             />
 
