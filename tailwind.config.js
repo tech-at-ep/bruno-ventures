@@ -36,6 +36,20 @@ module.exports = {
         extend: {
             translate: ['hover'],
         },
+      extend: {
+        fontFamily: {
+          'inter': "'Inter', sans-serif"
+        },
+        backgroundImage: theme => ({
+         'hero': "url('~/assets/brown.jpeg')"
+        }),
+      },
+      
+  },
+  variants: {
+    extend: {
+      translate: ['hover'],
     },
     plugins: [require('@tailwindcss/aspect-ratio'),],
+}
 }
