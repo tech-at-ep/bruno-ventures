@@ -1,5 +1,7 @@
 import "../styles/globals.css";
+import "react-image-crop/dist/ReactCrop.css";
 import "../styles/button.css";
+import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
 import {
   FirebaseAuthProvider,
@@ -21,8 +23,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <title>🐻 Bruno Ventures</title>
       </Head>
-      <ToastContainer />
       <Component {...pageProps} />
+      <ToastContainer />
     </FirebaseAuthProvider>
   );
   // return <Component {...pageProps} />

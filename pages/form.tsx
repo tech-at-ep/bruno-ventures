@@ -1,5 +1,11 @@
 import styles from "../styles/Form.module.css";
 import firebaseApp from "../util/firebaseApp";
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadString,
+} from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import {
   createRef,
@@ -11,12 +17,25 @@ import {
 import Modal from "@mui/material/Modal";
 import ReactCrop, { Crop } from "react-image-crop";
 import { toast } from "react-toastify";
+import LoadingOverlay from "react-loading-overlay";
+import { ConstructionOutlined } from "@mui/icons-material";
+import { useAuth } from "../util/firebaseAuthHelpers";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
+import SplashScreen from "../util/splashscreen";
 
 interface CardProps {
   accentColor: string;
   setAccentColor: Dispatch<SetStateAction<string>>;
   resetForm: Dispatch<SetStateAction<boolean>>;
   isSubmitted: boolean;
+  setProcessing: Dispatch<SetStateAction<boolean>>;
+  setAlreadyApplied: Dispatch<SetStateAction<boolean>>;
 }
 
 function ValidateApp(app: Application): string {
@@ -123,9 +142,13 @@ function Card({
   resetForm,
   isSubmitted,
   accentColor,
+  setProcessing,
+  setAlreadyApplied,
 }: CardProps) {
   const functions = getFunctions(firebaseApp);
   const addStartUp = httpsCallable(functions, "addStartUp");
+  const uploadPictureFromB64 = httpsCallable(functions, "uploadPictureFromB64");
+  const setImageURL = httpsCallable(functions, "setImageURL");
   const titleColor =
     perceievedLuminance(hexToRgb(accentColor)) > 220 ? "#000000" : "#ffffff";
   const [app, updateApp] = useState<Application>(empty);
@@ -137,13 +160,33 @@ function Card({
     });
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const error = ValidateApp(app);
     if (error === "") {
-      console.log("validated");
-      addStartUp({ app });
-      reset();
+      setProcessing(true);
+      const storage = getStorage();
+      let tempApp = { ...app };
+      tempApp.imageData = "";
+      const startupResponse = await addStartUp({ app: tempApp });
+      // this is shit typescript but i just need this to work lol
+      const id = (startupResponse as any).data.id;
+      const imageRef = ref(storage, `images/${id}`);
+      await uploadString(imageRef, app.imageData, "data_url");
+      const finalizeUpload = async () => {
+        try {
+          const dlURL = await getDownloadURL(imageRef);
+          console.log("image found, stopping loop");
+          await setImageURL({ id: id, imageUrl: dlURL });
+          setProcessing(false);
+          setAlreadyApplied(true);
+          toast.success("Your application was submitted successfully!");
+          reset();
+        } catch {
+          setTimeout(() => finalizeUpload(), 1000);
+        }
+      };
+      finalizeUpload();
     } else {
       toast.error(error);
     }
@@ -446,12 +489,12 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
   );
   const [croppedImageData, setCroppedImageData] = useState("");
 
-  useEffect(() => {
-    if (isSubmitted) {
-      setLocalAccentColor("#FF5A5F");
-      setImage("");
-    }
-  });
+  // useEffect(() => {
+  //   if (isSubmitted) {
+  //     setLocalAccentColor("#FF5A5F");
+  //     setImage("");
+  //   }
+  // });
 
   const getCroppedImage = (crop: Crop) => {
     if (!imageElt) {
@@ -658,31 +701,97 @@ export default function Form() {
   const titleColor =
     perceievedLuminance(hexToRgb(accentColor)) > 220 ? "#000000" : "#ffffff";
 
+  const [processing, setProcessing] = useState(false);
   const [isSubmitted, resetForm] = useState(false);
+  const [alreadyApplied, setAlreadyApplied] = useState(false);
+  const { isAuthenticated, user } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [fading, setFading] = useState(false);
+
+  const StopLoading = () => {
+    setFading(true);
+    setTimeout(() => setLoading(false), 1000);
+  };
+
+  setTimeout(StopLoading, 2000);
+
   useEffect(() => {
-    if (isSubmitted) {
-      setAccentColor("#FF5A5F");
+    const checkApplied = async () => {
+      const db = getFirestore(firebaseApp);
+      const appsCol = collection(db, "apps");
+      console.log(user?.email);
+      const appQuery = query(
+        appsCol,
+        where("applicant", "==", user ? user.email : "")
+      );
+      const appsSnapshot = await getDocs(appQuery);
+      const appsList = appsSnapshot.docs.map((doc) => doc.data());
+      console.log(appsList);
+      if (appsList.length > 0) {
+        setAlreadyApplied(true);
+      }
+    };
+    if (isAuthenticated) {
+      checkApplied();
     }
+    // if (isSubmitted) {
+    //   setAccentColor("#FF5A5F");
+    // }
+    if (loading) {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0;
+    }
+    loading
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "visible");
   });
 
   return (
-    <div className={styles.form_container} style={{ position: "relative" }}>
-      <FirstVector accentColor={accentColor} />
-      <SecondVector accentColor={accentColor} />
-      <div className={styles.form_title} style={{ color: titleColor }}>
-        <div style={{ marginBottom: "0px", paddingTop: "2rem" }}>
-          Welcome to
+    <div>
+      {loading && <SplashScreen fading={fading} />}
+      {isAuthenticated ? (
+        !alreadyApplied ? (
+          <div
+            className={styles.form_container}
+            style={{ position: "relative" }}
+          >
+            <LoadingOverlay
+              active={processing}
+              spinner={true}
+              text="Sit tight while we process your application."
+              styles={{ wrapper: { height: "100%" } }}
+            />
+
+            <FirstVector accentColor={accentColor} />
+            <SecondVector accentColor={accentColor} />
+            <div className={styles.form_title} style={{ color: titleColor }}>
+              <div style={{ marginBottom: "0px", paddingTop: "2rem" }}>
+                Welcome to
+              </div>
+              <div style={{ marginTop: "-0.7rem" }}>Bruno Ventures.</div>
+            </div>
+            <div className={`${styles.container}`}>
+              <Card
+                setAccentColor={setAccentColor}
+                accentColor={accentColor}
+                resetForm={resetForm}
+                isSubmitted={isSubmitted}
+                setProcessing={setProcessing}
+                setAlreadyApplied={setAlreadyApplied}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="p-4 font-semibold">
+            Thank you for submitting your company to Bruno Ventures! Our team is
+            currently reviewing your application.
+          </div>
+        )
+      ) : (
+        <div className="p-4 font-semibold">
+          Sign in with your Brown email to access the application form.
         </div>
-        <div style={{ marginTop: "-0.7rem" }}>Bruno Ventures.</div>
-      </div>
-      <div className={`${styles.container}`}>
-        <Card
-          setAccentColor={setAccentColor}
-          accentColor={accentColor}
-          resetForm={resetForm}
-          isSubmitted={isSubmitted}
-        />
-      </div>
+      )}
     </div>
   );
 }
