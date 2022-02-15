@@ -186,8 +186,7 @@ function Card({
       const finalizeUpload = async () => {
         try {
           const dlURL = await getDownloadURL(imageRef);
-          console.log("got image");
-          console.log(dlURL);
+
           if (dlURL) {
             setImageLink(dlURL);
             await setImageURL({ id: id, imageUrl: dlURL });
@@ -232,9 +231,7 @@ function Card({
             className={styles.button}
             onClick={(n) => {
               handleSubmit(n).then(() => {
-                console.log(imageLink);
                 setAlreadyApplied(true);
-                // force small delay for image to set in (idk why this fixes but it does)
                 setImageLink(imageLink);
                 setProcessing(false)
                 reset()
@@ -808,11 +805,9 @@ export default function Form() {
 
       console.log(appsList);
       if (appsList.length > 0) {
-        if(appsList[0].imageData){
-          setAlreadyApplied(true);
-          setImageLink(appsList[0].imageData);
-          setAccentColor(appsList[0].accentColor);
-        }
+        setAlreadyApplied(true);
+        setImageLink(appsList[0].imageData);
+        setAccentColor(appsList[0].accentColor);
       }
     };
 
@@ -916,7 +911,7 @@ export default function Form() {
           </div>
         )
       ) : (
-        <div className="p-56 font-semibold">
+        <div className="p-4 font-semibold">
           Sign in with your Brown email to access the application form.
         </div>
       )}
