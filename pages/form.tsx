@@ -28,17 +28,24 @@ import {
   where,
 } from "firebase/firestore";
 import SplashScreen from "../util/splashscreen";
+import { useRouter } from "next/router";
+
+import Bear1 from "../assets/thanks-bear.png"
 
 interface CardProps {
   accentColor: string;
   setAccentColor: Dispatch<SetStateAction<string>>;
   resetForm: Dispatch<SetStateAction<boolean>>;
   isSubmitted: boolean;
+  imageLink: string;
   setProcessing: Dispatch<SetStateAction<boolean>>;
+  setImageLink: Dispatch<SetStateAction<string>>;
   setAlreadyApplied: Dispatch<SetStateAction<boolean>>;
 }
 
+
 function ValidateApp(app: Application): string {
+
   const keysMap: Record<string, string> = {
     name: "Startup name",
     website: "Website link",
@@ -143,6 +150,8 @@ function Card({
   isSubmitted,
   accentColor,
   setProcessing,
+  setImageLink,
+  imageLink,
   setAlreadyApplied,
 }: CardProps) {
   const functions = getFunctions(firebaseApp);
@@ -173,19 +182,21 @@ function Card({
       const id = (startupResponse as any).data.id;
       const imageRef = ref(storage, `images/${id}`);
       await uploadString(imageRef, app.imageData, "data_url");
+
       const finalizeUpload = async () => {
         try {
           const dlURL = await getDownloadURL(imageRef);
-          console.log("image found, stopping loop");
-          await setImageURL({ id: id, imageUrl: dlURL });
-          setProcessing(false);
-          setAlreadyApplied(true);
-          toast.success("Your application was submitted successfully!");
-          reset();
+          console.log("got image");
+          console.log(dlURL);
+          if (dlURL) {
+            setImageLink(dlURL);
+            await setImageURL({ id: id, imageUrl: dlURL });
+          }
         } catch {
           setTimeout(() => finalizeUpload(), 1000);
         }
       };
+
       finalizeUpload();
     } else {
       toast.error(error);
@@ -219,7 +230,16 @@ function Card({
         <div className={styles.padding}>
           <button
             className={styles.button}
-            onClick={handleSubmit}
+            onClick={(n) => {
+              handleSubmit(n).then(() => {
+                console.log(imageLink);
+                setAlreadyApplied(true);
+                // force small delay for image to set in (idk why this fixes but it does)
+                setImageLink(imageLink);
+                setProcessing(false)
+                reset()
+              })
+            }}
             style={{ background: accentColor, color: titleColor }}
           >
             Submit
@@ -389,6 +409,7 @@ function FirstVector({ accentColor }: VectorProps) {
     <svg
       className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`}
       width="581"
+      z-index="-1"
       height="760"
       viewBox="0 0 581 760"
       fill="none"
@@ -413,6 +434,53 @@ function SecondVector({ accentColor }: VectorProps) {
       width="636"
       height="754"
       viewBox="0 0 636 754"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M368.962 794.473L96.9548 418.563L675.402 -4.19617e-05L947.409 375.91L368.962 794.473Z"
+        fill={accentColor}
+      />
+      <path
+        d="M96.9548 418.563C200.759 343.45 345.801 366.71 420.913 470.514C496.026 574.319 472.767 719.36 368.962 794.473C265.158 869.585 120.116 846.326 45.0037 742.521C-30.1091 638.717 -6.84975 493.676 96.9548 418.563Z"
+        fill={accentColor}
+      />
+    </svg>
+  );
+}
+
+function ThirdVector({ accentColor }: VectorProps) {
+  return (
+    <svg
+      className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`}
+      width="300"
+      height="300"
+      x="0px"
+      z-index="-1"
+      viewBox="400 400 1000 1000"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M368.962 794.473L96.9548 418.563L675.402 -4.19617e-05L947.409 375.91L368.962 794.473Z"
+        fill={accentColor}
+      />
+      <path
+        d="M96.9548 418.563C200.759 343.45 345.801 366.71 420.913 470.514C496.026 574.319 472.767 719.36 368.962 794.473C265.158 869.585 120.116 846.326 45.0037 742.521C-30.1091 638.717 -6.84975 493.676 96.9548 418.563Z"
+        fill={accentColor}
+      />
+    </svg>
+  );
+}
+
+function FourthVector({ accentColor }: VectorProps) {
+  return (
+    <svg
+      className={`${styles.bottom_right_vector}  ${styles.noselect} ${styles.nodrag}`}
+      width="318"
+      height="377"
+      z-index="-1"
+      viewBox="0 0 400 300"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -462,6 +530,7 @@ interface LogoFormProps {
 function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
   const fileInputRef = createRef<HTMLInputElement>();
   const colorInputRef = createRef<HTMLInputElement>();
+  
 
   const [image, setImage] = useState<string>("");
   const [accentColor, setLocalAccentColor] = useState<string>("#FF5A5F");
@@ -527,7 +596,8 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
       crop.width * scaleX,
       crop.height * scaleY
     );
-    setCroppedImageData(canvas.toDataURL("image/jpeg"));
+
+    setCroppedImageData(canvas.toDataURL("image/jpeg"));  
   };
 
   const onLogoUploaded = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -535,6 +605,8 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
       return;
     }
     setUploadedFile(event.target.files[0]);
+
+
     let reader = new FileReader();
     reader.onload = (ev: ProgressEvent<FileReader>) => {
       if (ev.target?.result != null) {
@@ -696,6 +768,10 @@ function LogoForm({ setAccentColor, setProperty, isSubmitted }: LogoFormProps) {
   );
 }
 
+function isMobile() {
+  return ( ( window.innerWidth <= 800 ) && ( window.innerHeight <= 700 ) );
+}
+
 export default function Form() {
   const [accentColor, setAccentColor] = useState<string>("#FF5A5F");
   const titleColor =
@@ -707,10 +783,13 @@ export default function Form() {
   const { isAuthenticated, user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [fading, setFading] = useState(false);
+  const router = useRouter();
+
+  const [imageLink, setImageLink] = useState("");
 
   const StopLoading = () => {
-    setFading(true);
-    setTimeout(() => setLoading(false), 1000);
+      setFading(true);
+      setTimeout(() => setLoading(false), 1000);    
   };
 
   setTimeout(StopLoading, 2000);
@@ -719,18 +798,24 @@ export default function Form() {
     const checkApplied = async () => {
       const db = getFirestore(firebaseApp);
       const appsCol = collection(db, "apps");
-      console.log(user?.email);
+
       const appQuery = query(
         appsCol,
         where("applicant", "==", user ? user.email : "")
       );
       const appsSnapshot = await getDocs(appQuery);
       const appsList = appsSnapshot.docs.map((doc) => doc.data());
+
       console.log(appsList);
       if (appsList.length > 0) {
-        setAlreadyApplied(true);
+        if(appsList[0].imageData){
+          setAlreadyApplied(true);
+          setImageLink(appsList[0].imageData);
+          setAccentColor(appsList[0].accentColor);
+        }
       }
     };
+
     if (isAuthenticated) {
       checkApplied();
     }
@@ -738,6 +823,7 @@ export default function Form() {
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0;
     }
+
     loading
       ? (document.body.style.overflow = "hidden")
       : (document.body.style.overflow = "visible");
@@ -775,18 +861,62 @@ export default function Form() {
                 resetForm={resetForm}
                 isSubmitted={isSubmitted}
                 setProcessing={setProcessing}
+                setImageLink={setImageLink}
+                imageLink={imageLink}
                 setAlreadyApplied={setAlreadyApplied}
               />
             </div>
           </div>
-        ) : (
-          <div className="p-4 font-semibold">
-            Thank you for submitting your company to Bruno Ventures! Our team is
-            currently reviewing your application.
+        ) : 
+          (
+          <div style={isMobile() ? {height: "100%", width:"100%"} : {height: "100%", overflow: "hidden"} }>
+            
+            {isMobile() ? 
+              <div/> :
+                <div>
+                  <ThirdVector accentColor={accentColor} />
+                  <FourthVector accentColor={accentColor} />
+                </div>
+            }
+
+            <div className={isMobile() ? "p-20 font-semibold text-center text-xl" : "p-24 font-semibold text-center text-3xl"}>
+              <div>
+                Thank you for submitting your company to Bruno Ventures!
+              </div>
+
+              <br/>
+              <img className="animate-ping" 
+                    style={{margin:"auto", animationDuration:"10s", animationTimingFunction:"linear"}} 
+                    height="278px" 
+                    width="278px" 
+                    src={Bear1.src} />
+              <br/>
+
+              <div className={isMobile() ? "text-lg p-2" : "text-2xl p-2"} style={{margin:"10px"}} >
+                Our team is currently reviewing your application.
+              </div>
+
+              <div style={{display:"grid", maxWidth: "400px", margin: "auto", alignContent:"center", 
+                   justifyContent:"space-evenly", gap:"-2rem", gridAutoFlow: "column"}}>
+                {isMobile() ? <div/> :
+                  <img src={imageLink} style={{margin:"auto", borderColor:accentColor, 
+                     borderWidth:"3px", borderRadius:"10%"}} width="70px" />
+                }
+                <button
+                    className={styles.button}
+                    onClick={() => {
+                      router.push("/");
+                    }}
+                    style={{margin:"auto", height:"70px", background: accentColor, color: titleColor}}> 
+                    Return Home 
+                </button>
+              </div>
+
+            </div>
           </div>
         )
       ) : (
-        <div className="p-4 font-semibold">
+        <div className="p-56 font-semibold">
           Sign in with your Brown email to access the application form.
         </div>
       )}
