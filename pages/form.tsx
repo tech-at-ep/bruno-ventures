@@ -30,7 +30,7 @@ import {
 import SplashScreen from "../util/splashscreen";
 import { useRouter } from "next/router";
 
-import Bear1 from "../assets/thanks-bear.png"
+import EPLogo from "../assets/eplogo.png";
 
 interface CardProps {
   accentColor: string;
@@ -189,6 +189,7 @@ function Card({
 
           if (dlURL) {
             setImageLink(dlURL);
+            console.log(dlURL);
             await setImageURL({ id: id, imageUrl: dlURL });
           }
         } catch {
@@ -233,7 +234,9 @@ function Card({
               handleSubmit(n).then(() => {
                 setAlreadyApplied(true);
                 setImageLink(imageLink);
-                setProcessing(false)
+                if (imageLink) {
+                  setProcessing(false)
+                }
                 reset()
               })
             }}
@@ -431,53 +434,6 @@ function SecondVector({ accentColor }: VectorProps) {
       width="636"
       height="754"
       viewBox="0 0 636 754"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M368.962 794.473L96.9548 418.563L675.402 -4.19617e-05L947.409 375.91L368.962 794.473Z"
-        fill={accentColor}
-      />
-      <path
-        d="M96.9548 418.563C200.759 343.45 345.801 366.71 420.913 470.514C496.026 574.319 472.767 719.36 368.962 794.473C265.158 869.585 120.116 846.326 45.0037 742.521C-30.1091 638.717 -6.84975 493.676 96.9548 418.563Z"
-        fill={accentColor}
-      />
-    </svg>
-  );
-}
-
-function ThirdVector({ accentColor }: VectorProps) {
-  return (
-    <svg
-      className={`${styles.top_left_vector}  ${styles.noselect} ${styles.nodrag}`}
-      width="300"
-      height="300"
-      x="0px"
-      z-index="-1"
-      viewBox="400 400 1000 1000"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M368.962 794.473L96.9548 418.563L675.402 -4.19617e-05L947.409 375.91L368.962 794.473Z"
-        fill={accentColor}
-      />
-      <path
-        d="M96.9548 418.563C200.759 343.45 345.801 366.71 420.913 470.514C496.026 574.319 472.767 719.36 368.962 794.473C265.158 869.585 120.116 846.326 45.0037 742.521C-30.1091 638.717 -6.84975 493.676 96.9548 418.563Z"
-        fill={accentColor}
-      />
-    </svg>
-  );
-}
-
-function FourthVector({ accentColor }: VectorProps) {
-  return (
-    <svg
-      className={`${styles.bottom_right_vector}  ${styles.noselect} ${styles.nodrag}`}
-      width="318"
-      height="377"
-      z-index="-1"
-      viewBox="0 0 400 300"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -783,6 +739,7 @@ export default function Form() {
   const router = useRouter();
 
   const [imageLink, setImageLink] = useState("");
+  const [companyName, setCompanyName] = useState("");
 
   const StopLoading = () => {
       setFading(true);
@@ -803,11 +760,11 @@ export default function Form() {
       const appsSnapshot = await getDocs(appQuery);
       const appsList = appsSnapshot.docs.map((doc) => doc.data());
 
-      console.log(appsList);
       if (appsList.length > 0) {
         setAlreadyApplied(true);
         setImageLink(appsList[0].imageData);
         setAccentColor(appsList[0].accentColor);
+        setCompanyName(appsList[0].name)
       }
     };
 
@@ -826,7 +783,7 @@ export default function Form() {
 
   return (
     <div>
-      {loading && <SplashScreen fading={fading} />}
+      {loading && <SplashScreen fading={fading}/>}
       {isAuthenticated ? (
         !alreadyApplied ? (
           <div
@@ -835,6 +792,7 @@ export default function Form() {
           >
             <LoadingOverlay
               active={processing}
+              fadeSpeed={1500}
               spinner={true}
               text="Sit tight while we process your application."
               //@ts-ignore
@@ -865,14 +823,11 @@ export default function Form() {
         ) : 
           (
           <div style={isMobile() ? {height: "100%", width:"100%"} : {height: "100%", overflow: "hidden"} }>
-            
-            {isMobile() ? 
-              <div/> :
-                <div>
-                  <ThirdVector accentColor={accentColor} />
-                  <FourthVector accentColor={accentColor} />
-                </div>
-            }
+            <div className="bg"></div>
+              <div className="bg bg2"></div>
+              <div className="bg bg3"></div>
+              <div className="content">
+            </div>
 
             <div className={isMobile() ? "p-20 font-semibold text-center text-xl" : "p-24 font-semibold text-center text-3xl"}>
               <div>
@@ -880,29 +835,29 @@ export default function Form() {
               </div>
 
               <br/>
-              <img className="animate-ping" 
-                    style={{margin:"auto", animationDuration:"10s", animationTimingFunction:"linear"}} 
-                    height="278px" 
-                    width="278px" 
-                    src={Bear1.src} />
+                {imageLink ? 
+                  <img src={imageLink} style={{margin:"auto", borderColor:accentColor, 
+                      borderWidth:(imageLink ? "5px" : "unset"), borderRadius:"10%"}} width="200px" />
+                  :
+                  <img src={EPLogo.src} style={{margin:"auto"}} width="180px" />
+                }
               <br/>
 
               <div className={isMobile() ? "text-lg p-2" : "text-2xl p-2"} style={{margin:"10px"}} >
-                Our team is currently reviewing your application.
+                Our team will reach out to you about {companyName} within the next week.
               </div>
 
               <div style={{display:"grid", maxWidth: "400px", margin: "auto", alignContent:"center", 
                    justifyContent:"space-evenly", gap:"-2rem", gridAutoFlow: "column"}}>
-                {isMobile() ? <div/> :
-                  <img src={imageLink} style={{margin:"auto", borderColor:accentColor, 
-                     borderWidth:"3px", borderRadius:"10%"}} width="70px" />
-                }
+                
                 <button
                     className={styles.button}
                     onClick={() => {
                       router.push("/");
                     }}
-                    style={{margin:"auto", height:"70px", background: accentColor, color: titleColor}}> 
+                    style={{boxShadow: "0.5px 0.5px 3px #000000", 
+                            margin:"auto", height:"70px", background: "#cf363b", border: "unset",
+                            color: titleColor}}> 
                     Return Home 
                 </button>
               </div>
