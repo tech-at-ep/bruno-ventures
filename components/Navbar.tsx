@@ -19,17 +19,32 @@ const Navbar = () => {
       console.log(e);
     }
   }
+  const sendToAboutPage = (e) => {
+      e.preventDefault();
+      window.location.href='/about';
+      }
+  const sendHome = (ev) => {
+      ev.preventDefault();
+      window.location.href='/';
+      }
+
+const navStyle = {
+  backgroundColor: 'rgba(50, 50, 50, 0.5)',
+  height: '100px',
+};
+const navButtonStyle = {
+  opacity: '1'
+};
 
   return (
-    <div className="flex flex-auto justify-end items-center h-28 absolute left-0 right-0 top-0">
+    <div className="flex flex-auto justify-end items-center h-28 absolute left-0 right-0 top-0" style={navStyle}>
           
           {/* Desktop Nav */}
-
-          <div className="flex justify-evenly w-1/5 mr-12 lg:visible sm:invisible">
-              <button onClick={handleSignin} className="text-lg font-light text-white transition-all hover:text-red-500">For Startups</button>
-              <a href="#about" className="text-lg font-light text-white transition-all hover:text-red-500">About Us</a>
+          <div className="flex justify-evenly w-1/5 mr-12 lg:visible sm:visible">
+              <button onClick={handleSignin} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>For Startups</button>
+              <button onClick={sendToAboutPage} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>About Us</button>
+              <button onClick={sendHome} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>Home</button>
           </div>
-
     </div>
   );
 };

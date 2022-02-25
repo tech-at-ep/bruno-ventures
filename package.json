@@ -22,7 +22,8 @@
     "react-image-crop": "^9.0.5",
     "react-loading-overlay": "^1.0.1",
     "react-toastify": "^8.1.0",
-    "superb": "^4.0.0"
+    "superb": "^4.0.0",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.3.0",
