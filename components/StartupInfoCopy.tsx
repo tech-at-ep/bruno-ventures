@@ -78,7 +78,22 @@ export interface CompanyData {
   identifier: string;
 }
 
-export default function StartupInfoCopy() {
+export default function StartupInfoCopy({
+  accentColor,
+  approved,
+  email,
+  facebook,
+  founders,
+  imageData,
+  industry,
+  instagram,
+  linkedin,
+  mission,
+  name,
+  twitter,
+  website,
+  identifier,
+}: CompanyData) {
   const router = useRouter();
   const { startupSlug } = router.query;
 
@@ -134,10 +149,7 @@ export default function StartupInfoCopy() {
     <div className="font-inter">
       {loading && <SplashScreen fading={fading} />}
       {/* just decided to mix tailwind and inline styles b/c arb color not wokring on tailwind*/}
-      <div
-        className={"h-32"}
-        style={{ backgroundColor: companyData.accentColor }}
-      />
+      <div className={"h-32"} style={{ backgroundColor: accentColor }} />
 
       <div
         className="-mt-12 h-36 w-36 mx-auto rounded-lg border-4 p-1 border-white bg-white overflow-hidden"
@@ -148,19 +160,19 @@ export default function StartupInfoCopy() {
           // className="h-36 w-36 mx-auto rounded-full border-8 border-white"
           src={
             // opensea.src
-            companyData.imageData != null ? companyData.imageData : opensea.src
+            imageData != null ? imageData : opensea.src
           }
         />
       </div>
 
       <div className="max-w-3xl px-4 mx-auto -mt-2">
         <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-900">
-          At a glance: <span className="font-light">{companyData.name}</span>
+          At a glance: <span className="font-light">{name}</span>
         </h1>
         <div className="flex justify-center divide-x  divide-x-gray-200 items-center mb-8">
           <div className="px-6 whitespace-nowrap">
             <div className="font-bold">Industry</div>
-            {companyData.industry}
+            {industry}
           </div>
 
           <div className="px-6 whitespace-nowrap">
@@ -170,39 +182,36 @@ export default function StartupInfoCopy() {
 
           <div className="px-6 whitespace-nowrap">
             <div className="font-bold">Contact</div>
-            {companyData.email}
+            {email}
           </div>
           <div className="px-6 whitespace-nowrap">
             <div className="font-bold">Founders</div>
-            {companyData.founders}
+            {founders}
           </div>
-          {(companyData.twitter ||
-            companyData.instagram ||
-            companyData.linkedin ||
-            companyData.facebook) && (
+          {(twitter || instagram || linkedin || facebook) && (
             <div className="px-6 whitespace-nowrap">
               <div className="font-bold">Socials</div>
               <SocialMedia
-                facebook={companyData.twitter}
-                instagram={companyData.instagram}
-                twitter={companyData.twitter}
-                linkedin={companyData.linkedin}
+                facebook={twitter}
+                instagram={instagram}
+                twitter={twitter}
+                linkedin={linkedin}
               />
             </div>
           )}
           <div className="px-6 whitespace-nowrap">
             <div className="font-bold">Website</div>
             <a
-              href={companyData.website}
+              href={website}
               className="hover:text-blue-600 text-blue-500 focus:underline"
             >
-              {companyData.website}
+              {website}
             </a>
           </div>
         </div>
 
         <div className="border-t pt-6 text-xl">
-          <span className="font-bold">Description:</span> {companyData.mission}
+          <span className="font-bold">Description:</span> {mission}
         </div>
 
         {/* <div className="mt-4">
