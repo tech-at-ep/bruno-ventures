@@ -5,9 +5,6 @@ import { useState, useEffect } from "react";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import AboutStatement2 from "../components/AboutStatement2";
-import Ourteam from "../components/Ourteam";
-import LegalNotice from "../components/LegalNotice";
 
 import logo from "../assets/logo.jpeg";
 import Aaron from "../images/headshots/Aaron.jpeg";
@@ -15,6 +12,7 @@ import Jacob from "../images/headshots/Jacob_Headshot.jpeg";
 import Michael from "../images/headshots/Michael_headshot.png";
 import Nathan from "../images/headshots/nathan.jpeg";
 import Placeholder from "../images/headshots/placeholder.jpeg";
+import TeamMemberCard from "../components/TeamMemberCard";
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,21 +38,6 @@ export default function Home() {
   const headlineStyle = {
   color: 'rgb(239, 68, 68)'
   };
-  const cardStyle = {
-    height: '200px',
-    width: '150px'
-  };
-  const nameStyle = {
-    fontSize: '15px',
-  }
-  const titleStyle = {
-    fontWeight: 'normal',
-    fontSize: '10px',
-  }
-  const imgStyle= {
-    //   height: '130px',
-    // width: '150px'
-  }
 
   return (
     <div>
@@ -62,7 +45,7 @@ export default function Home() {
       <div className="box-border">
         <div className="flex flex-col">
           <Navbar />
-          <div className="p-44 items-center">
+          <div className="pt-44 pb-32 items-center">
             <div className="headline__headline text-2xl font-bold text-center text-blue-800 lg:mx-auto lg:w-6/6 lg:text-8xl lg:text-gray-90 " style={headlineStyle}>
               ABOUT BRUNO VENTURES
             </div>
@@ -82,16 +65,12 @@ export default function Home() {
               Our Team:
             </p>
             <div className="grid grid-cols-4 gap-4">
-              <div className="card" style={cardStyle}>
-                <img src={Aaron.src} style={imgStyle}></img>
-                <p class="text-center text-center" style={nameStyle}>Aaron Wang</p>
-                <p class="text-center" style={titleStyle}>Engineering Manager</p>
-              </div>
-              <div className="card" style={cardStyle}>
-                <img src={Aaron.src} style={imgStyle}></img>
-                <p class="text-center text-center" style={nameStyle}>Aaron Wang</p>
-                <p class="text-center" style={titleStyle}>Engineering Manager</p>
-              </div>
+              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
+              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
+              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
+              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
+              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
+              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
             </div>                      
           </div>
         </div>
