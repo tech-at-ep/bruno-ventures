@@ -41,14 +41,15 @@ export default function Home() {
   color: 'rgb(239, 68, 68)'
   };
   const cardStyle = {
-    // height: '200px',
-    // width: '150px'
+    height: '200px',
+    width: '150px'
   };
   const nameStyle = {
-    // fontSize: '30px',
+    fontSize: '15px',
   }
   const titleStyle = {
-    // fontWeight: 'normal',
+    fontWeight: 'normal',
+    fontSize: '10px',
   }
   const imgStyle= {
     //   height: '130px',
@@ -80,7 +81,18 @@ export default function Home() {
             <p className="p-4 text-4xl text-center">
               Our Team:
             </p>
-            <p> Team Members</p>                      
+            <div className="grid grid-cols-4 gap-4">
+              <div className="card" style={cardStyle}>
+                <img src={Aaron.src} style={imgStyle}></img>
+                <p class="text-center text-center" style={nameStyle}>Aaron Wang</p>
+                <p class="text-center" style={titleStyle}>Engineering Manager</p>
+              </div>
+              <div className="card" style={cardStyle}>
+                <img src={Aaron.src} style={imgStyle}></img>
+                <p class="text-center text-center" style={nameStyle}>Aaron Wang</p>
+                <p class="text-center" style={titleStyle}>Engineering Manager</p>
+              </div>
+            </div>                      
           </div>
         </div>
         <div className="text-center p-20">
