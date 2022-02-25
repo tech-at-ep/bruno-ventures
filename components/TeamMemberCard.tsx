@@ -2,9 +2,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useAuth, User } from "../util/firebaseAuthHelpers";
 
-import Aaron from "../images/headshots/Aaron.jpeg";
-import Placeholder from "../images/headshots/placeholder.jpeg";
-
   const cardStyle = {
     height: '200px',
     width: '150px'

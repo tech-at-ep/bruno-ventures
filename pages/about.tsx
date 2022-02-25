@@ -39,6 +39,15 @@ export default function Home() {
   color: 'rgb(239, 68, 68)'
   };
 
+  const membersArray = [
+  {name: "Aaron Wang", title: "Engineering Manager", headshot: Aaron},
+  {name: "Luke Primis", title: "Fullstack Engineer", headshot: Placeholder},
+  {name: "Jennifer Wang", title: "Fullstack Engineer", headshot: Placeholder},
+  {name: "Nathan Luu", title: "Fullstack Engineer", headshot: Nathan},
+  {name: "Michael Xu", title: "Frontend Developer", headshot: Michael},
+  {name: "Jacob Frausto", title: "Frontend Developer", headshot: Jacob}
+  ]
+
   return (
     <div>
       {loading && <SplashScreen fading={fading} />}
@@ -65,12 +74,9 @@ export default function Home() {
               Our Team:
             </p>
             <div className="grid grid-cols-4 gap-4">
-              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
-              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
-              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
-              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
-              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
-              <TeamMemberCard name={"Aaron Wang"} title={"Engineering Manager"} headshot={Aaron}/>
+              {membersArray.map((member) => (
+                <TeamMemberCard name={member.name} title={member.title} headshot={member.headshot}/>
+              ))}
             </div>                      
           </div>
         </div>
