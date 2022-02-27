@@ -2,12 +2,10 @@ import styles from "../styles/Home.module.css";
 
 import SplashScreen from "../util/splashscreen";
 import { useState, useEffect } from "react";
+import { Parallax } from 'react-parallax';
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import AboutStatement2 from "../components/AboutStatement2";
-import Ourteam from "../components/Ourteam";
-import LegalNotice from "../components/LegalNotice";
 
 import logo from "../assets/logo.jpeg";
 import Aaron from "../images/headshots/Aaron.jpeg";
@@ -15,6 +13,8 @@ import Jacob from "../images/headshots/Jacob_Headshot.jpeg";
 import Michael from "../images/headshots/Michael_headshot.png";
 import Nathan from "../images/headshots/nathan.jpeg";
 import Placeholder from "../images/headshots/placeholder.jpeg";
+import NelsonPic from "../assets/nelsonpic.jpeg";
+import TeamMemberCard from "../components/TeamMemberCard";
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,56 +38,74 @@ export default function Home() {
   setTimeout(StopLoading, 2000);
 
   const headlineStyle = {
-  color: 'rgb(239, 68, 68)'
+  // color: 'rgb(255, 255, 255)',
+  color: 'rgb(255, 255, 255)',
+  backgroundColor: 'rgba(0,0,0,.3)',
+  padding: '120px',
+  paddingBottom: '180px',
   };
-  const cardStyle = {
-    // height: '200px',
-    // width: '150px'
+
+  const aboutTextStyle = {
+  letterSpacing: '3px',
+  lineHeight: '50px'
   };
-  const nameStyle = {
-    // fontSize: '30px',
+
+  const imageStyle= {
+    backgroundImage: `url(${NelsonPic.src})`,
+    height: '500px',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    opacity: '1'
   }
-  const titleStyle = {
-    // fontWeight: 'normal',
-  }
-  const imgStyle= {
-    //   height: '130px',
-    // width: '150px'
-  }
+
+  const membersArray = [
+  {name: "Aaron Wang", title: "Engineering Manager", headshot: Aaron},
+  {name: "Luke Primis", title: "Fullstack Engineer", headshot: Placeholder},
+  {name: "Jennifer Wang", title: "Fullstack Engineer", headshot: Placeholder},
+  {name: "Nathan Luu", title: "Fullstack Engineer", headshot: Nathan},
+  {name: "Michael Xu", title: "Frontend Developer", headshot: Michael},
+  {name: "Jacob Frausto", title: "Frontend Developer", headshot: Jacob}
+  ]
 
   return (
     <div>
       {loading && <SplashScreen fading={fading} />}
       <div className="box-border">
-        <div className="flex flex-col">
+        <div className="flex flex-col" style={imageStyle}>
           <Navbar />
-          <div className="p-44 items-center">
+          <div className="pt-2 pb-32 items-center" >
             <div className="headline__headline text-2xl font-bold text-center text-blue-800 lg:mx-auto lg:w-6/6 lg:text-8xl lg:text-gray-90 " style={headlineStyle}>
-              ABOUT BRUNO VENTURES
+              ABOUT <br></br>BRUNO VENTURES
             </div>
           </div>
         </div>
         <div className="flex flex-row">
-          <div className="text-center" style={{width: '50%'}}>
-            <p className="p-4 text-4xl text-center">
-              Mission Statement:
+          <div className="text-center">
+            <p className="pt-16  pb-8 text-5xl text-center" style={{color: 'rgb(239, 68, 68)'}}>
+              <b>Mission Statement:</b>
             </p>
-            <p className="p-4 text-2xl text-center">
+            <div className="p-12 text-2xl text-center" style={aboutTextStyle}>
               For five decades we have partnered with intrepid founders to build iconic companies that made history. Today, Kleiner Perkins continues that legacy, investing in founders with bold ideas that span industries and continents, partnering with them from inception to IPO and beyond to maximize the potential of their ideas… and make history.
-            </p>
-          </div>
-          <div className="text-center" style={{width: '50%'}}>
-            <p className="p-4 text-4xl text-center">
-              Our Team:
-            </p>
-            <p> Team Members</p>                      
+            </div>
           </div>
         </div>
-        <div className="text-center p-20">
-            <p className="p-4 text-4xl text-center">
-              Legal Language — TO BE REVIEWED WITH LIZ MALONE:
+        <div className="flex flex-row" style={{width: '73%', margin: '0 auto'}}>
+          <div className="text-center">
+            <p className="p-16 text-5xl text-center" style={{color: 'rgb(239, 68, 68)'}}>
+              <b>Our Team:</b>
             </p>
-            <p className="p-4 text-2xl text-center">
+            <div className=" flex flex-row text-center">
+              {membersArray.map((member) => (
+                <TeamMemberCard name={member.name} title={member.title} headshot={member.headshot}/>
+              ))}
+            </div>                      
+          </div>
+        </div>
+        <div className="text-center pt-10">
+            <p className="p-2 pt-16 text-5xl text-center" style={{color: 'rgb(239, 68, 68)'}}>
+              <b>Legal Language — TO BE REVIEWED WITH LIZ MALONE:</b>
+            </p>
+            <p className="p-12 text-2xl text-center" style={aboutTextStyle}>
               The sole purpose of this website is to recognize the existing work of Brown University student ventures. Furthermore, Brown EP and the Nelson Center for Entrepreneurship are not liable for any unwarranted copying of current ventures.
             </p>
           </div>

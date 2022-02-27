@@ -21,6 +21,7 @@
     "react-dom": "17.0.2",
     "react-image-crop": "^9.0.5",
     "react-loading-overlay": "^1.0.1",
+    "react-parallax": "^3.3.0",
     "react-toastify": "^8.1.0",
     "superb": "^4.0.0",
     "yarn": "^1.22.17"

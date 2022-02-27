@@ -14,7 +14,7 @@ import { useAuth, User } from "../util/firebaseAuthHelpers";
     fontSize: '10px',
   }
   const imgStyle= {
-    height: '78%',
+    height: '79%',
     margin: 'auto',
     display: 'block'
     // width: '150px'

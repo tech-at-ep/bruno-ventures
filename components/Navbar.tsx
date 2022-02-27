@@ -23,6 +23,10 @@ const Navbar = () => {
       e.preventDefault();
       window.location.href='/about';
       }
+  const sendToAbout2Page = (e2) => {
+      e2.preventDefault();
+      window.location.href='/about2';
+      }
   const sendHome = (ev) => {
       ev.preventDefault();
       window.location.href='/';
@@ -40,9 +44,11 @@ const navButtonStyle = {
     <div className="flex flex-auto justify-end items-center h-28 absolute left-0 right-0 top-0" style={navStyle}>
           
           {/* Desktop Nav */}
-          <div className="flex justify-evenly w-1/5 mr-12 lg:visible sm:visible">
-              <button onClick={handleSignin} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>For Startups</button>
+          <div className="flex justify-evenly w-1/4 mr-12 lg:visible sm:visible">
+{/*          <div className="flex justify-evenly w-1/5 mr-12 lg:visible sm:visible">
+*/}              <button onClick={handleSignin} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>For Startups</button>
               <button onClick={sendToAboutPage} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>About Us</button>
+              <button onClick={sendToAbout2Page} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>About Us2</button>
               <button onClick={sendHome} className="text-lg font-light text-white transition-all hover:text-red-500" style={navButtonStyle}>Home</button>
           </div>
     </div>
