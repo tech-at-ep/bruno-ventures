@@ -3,18 +3,20 @@ import React from "react";
 import { useAuth, User } from "../util/firebaseAuthHelpers";
 
   const cardStyle = {
-    height: '200px',
-    width: '150px'
+    height: '220px',
+    width: '170px'
   };
   const nameStyle = {
-    fontSize: '15px',
+    fontSize: '20px',
   }
   const titleStyle = {
     fontWeight: 'normal',
     fontSize: '10px',
   }
   const imgStyle= {
-    //   height: '130px',
+    height: '78%',
+    margin: 'auto',
+    display: 'block'
     // width: '150px'
   }
 
