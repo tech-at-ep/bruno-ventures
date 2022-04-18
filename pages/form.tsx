@@ -198,6 +198,10 @@ function Card({
       };
 
       finalizeUpload();
+      setImageLink(imageLink)
+      setProcessing(false)
+      setAlreadyApplied(true);
+      reset()
     } else {
       toast.error(error);
     }
@@ -231,14 +235,7 @@ function Card({
           <button
             className={styles.button}
             onClick={(n) => {
-              handleSubmit(n).then(() => {
-                setAlreadyApplied(true);
-                setImageLink(imageLink);
-                if (imageLink) {
-                  setProcessing(false)
-                }
-                reset()
-              })
+              handleSubmit(n)
             }}
             style={{ background: accentColor, color: titleColor }}
           >
